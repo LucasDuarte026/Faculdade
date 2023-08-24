@@ -1,0 +1,18 @@
+Exercícios de participação do dia 24/08 Tarefa:
+Espaços indicam a mudança de campo
+
+A)  19  "334455" 11 "josé Carlos"
+    19 é para o tamanho do registro, dado do NUSP, 11 é para tamanho da string e a string
+
+B)  8 "334455" 0 ""
+    4 para o NUSP + 4 para armazenar o 0 
+
+C) 13 "" 5 "maria"
+    4 para NUSP + 4 para o delimitador do nome + 5 do próprio nome
+
+d) 8 "" 0 ""
+    8 para registro: + campo Nusp e indicador 0 de tamanho 
+
+e) 4 + 4 + 4 +5 
+    4 + 4 + 4 dos 3 primeiros pulos para comparar 5 (tamanho de maria) 
+com o index do campo dos nomes + 5 de teste, byte a byte
