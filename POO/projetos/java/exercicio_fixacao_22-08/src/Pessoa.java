@@ -29,6 +29,16 @@ public class Pessoa {
     
         System.out.format("\nNovo rg é %s",this.rg);
     }
+    public String getName(){
+        return this.nome;
+    }
+    public String getCPF(){
+        return this.cpf;
+    }
+    public String getRG(){
+        return this.rg;
+    }
+
     public void mostrarDados() {
     
         System.out.format("\n\t -- -- Morador -- -- \nNome: %s",this.nome);

@@ -1,8 +1,8 @@
-public class Moradia {
+public abstract class Moradia {
 
-    private String rua;
-    private int numero;
-    private Pessoa p;
+    protected String rua;
+    protected int numero;
+    protected Pessoa p;
 
     public Moradia(String rua, int numero, Pessoa p) {
         this.rua = rua;
@@ -10,10 +10,29 @@ public class Moradia {
         this.p = p;
     }
 
-    public void imprimeDados(){
-            p.mostrarDados();
-            System.out.format("\n\tEndereço\nrua: %s e número: %d",rua,numero);
-    
+    public String getRua() {
+        return rua;
     }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public Pessoa getPessoa() {
+        return p;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public void setP(Pessoa p) {
+        this.p = p;
+    }
+    public abstract float calculaCustosTotais(); 
 
 }
