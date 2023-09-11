@@ -4,4 +4,4 @@ Projetos de ED3:
 
 # Integrantes
 ## Lucas Sales Duarte  11734490
-# BAILE -- -- -- --
+## Joao Victor de Almeida 13695424 
