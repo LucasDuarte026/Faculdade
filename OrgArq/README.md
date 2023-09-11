@@ -1,3 +1,3 @@
-# exercícios
+# Exercícios
 
-exercícios continuados em aula separados por pasta e em ordem
+Exercícios continuados em aula separados por pasta e em ordem
