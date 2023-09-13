@@ -1,0 +1,39 @@
+procedimentos
+1) Inserir Cristina Null Null
+2) inserir NULL NULL NULL
+
+condições iniciais  
+topo com 3
+
+há 4 registros (0,1,2,3) o quinto é vazio
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+topo: 3
+Catarina -- -- -- 
+* -1 RuabA ---- -- - -- 
+Pedro rua -- -- 
+* 1 ua dwa -- - -- - 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+Presseguimos com a primeira inserção:
+    - Como o topo está apontando para o 3, troca-se tal registro, insere-se cristina no RRN 3 e troca o topo por 1 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+topo: 1
+Catarina -- -- -- 
+* -1 RuabA ---- -- - -- 
+Pedro rua -- -- 
+cristina Null null -- - -- - 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+Presseguimos com a segunda inserção:
+    - Como o topo está apontando para o 1, troca-se tal registro, insere-se cristina no RRN 1 e troca o topo por -1
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+topo: -1
+Catarina -- -- -- 
+Null null null ---- -- - -- 
+Pedro rua -- -- 
+cristina Null null -- - -- - 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
