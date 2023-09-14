@@ -3,7 +3,7 @@
 Dados dos integrantes:
 
     -> Lucas Sales Duarte - 11734490
-    ->
+    -> João Victor de Almeida 13695424
 Alunos do curso de graduação de engenharia de computação
 */
 
