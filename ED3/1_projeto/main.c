@@ -3,31 +3,16 @@
 Dados dos integrantes:
 
     -> Lucas Sales Duarte - 11734490
-    ->
+    -> João Victor de Almeida - 13695424
 Alunos do curso de graduação de engenharia de computação
 */
 
 #include <stdio.h>
 
-typedef struct {
-    int numRegistros;
-    int status; // 1 para consistente, 0 para inconsistentes
-} Cabecalho;
-
-typedef struct {
-    char nomeTecnologiaOrigem[50];
-    int grupo;
-} Registro;
 
 
 FILE* init_bin(FILE* bin){
-    Cabecalho cabecalho;
-    cabecalho.numRegistros = 0; 
-    cabecalho.status = 1; 
-
-    
-    fwrite(&cabecalho, sizeof(Cabecalho), 1, bin);
-
+    FILE *filebin = fopen("arquivoTrab1.bin", "wb");
     return bin;
 }
 
@@ -42,23 +27,13 @@ FILE *archive_open(const char *nameArchive)
 }
 
 void printar_binario(const char *binArchiveName) {
+
     FILE *bin = fopen(binArchiveName, "rb");
     if (bin == NULL) {
         printf("Erro ao abrir o arquivo binário.\n");
         return;
-    }
-
-    Cabecalho cabecalho;
-    fread(&cabecalho, sizeof(Cabecalho), 1, bin);
-
-    printf("Número de registros: %d\n", cabecalho.numRegistros);
-    printf("Status do arquivo: %s\n", cabecalho.status == 1 ? "Consistente" : "Inconsistente");
-
-    Registro registro;
-    while (fread(&registro, sizeof(Registro), 1, bin) == 1) {
-        // Imprime os campos do registro aqui
-        // Exemplo:
-        // printf("Nome da Tecnologia: %s\n", registro.nomeTecnologiaOrigem);
+    }else{
+        return 0; //ajustar...
     }
 
     fclose(bin);
