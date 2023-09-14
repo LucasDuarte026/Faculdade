@@ -9,13 +9,29 @@ Alunos do curso de graduação de engenharia de computação
 
 #include <stdio.h>
 
+typedef struct {
+    int numRegistros;
+    int status; // 1 para consistente, 0 para inconsistentes
+} Cabecalho;
+
+typedef struct {
+    char nomeTecnologiaOrigem[50];
+    int grupo;
+} Registro;
+
 
 FILE* init_bin(FILE* bin){
+    Cabecalho cabecalho;
+    cabecalho.numRegistros = 0; 
+    cabecalho.status = 1; 
 
-
+    
+    fwrite(&cabecalho, sizeof(Cabecalho), 1, bin);
 
     return bin;
 }
+
+
 FILE *archive_open(const char *nameArchive)
 {
     // entrada do arquivoe seu retorno em ponteiro
@@ -25,9 +41,29 @@ FILE *archive_open(const char *nameArchive)
     return file;
 }
 
-void printar_binario()
-{
+void printar_binario(const char *binArchiveName) {
+    FILE *bin = fopen(binArchiveName, "rb");
+    if (bin == NULL) {
+        printf("Erro ao abrir o arquivo binário.\n");
+        return;
+    }
+
+    Cabecalho cabecalho;
+    fread(&cabecalho, sizeof(Cabecalho), 1, bin);
+
+    printf("Número de registros: %d\n", cabecalho.numRegistros);
+    printf("Status do arquivo: %s\n", cabecalho.status == 1 ? "Consistente" : "Inconsistente");
+
+    Registro registro;
+    while (fread(&registro, sizeof(Registro), 1, bin) == 1) {
+        // Imprime os campos do registro aqui
+        // Exemplo:
+        // printf("Nome da Tecnologia: %s\n", registro.nomeTecnologiaOrigem);
+    }
+
+    fclose(bin);
 }
+
 
 short int functionality_1(const char *csvArchiveName, const char *binArchiveName)
 {
@@ -48,7 +84,7 @@ short int functionality_1(const char *csvArchiveName, const char *binArchiveName
     
 
     fclose(csv);
-    printar_binario();
+    printar_binario(binArchiveName);
     fclose(bin);
     return 0;
 }
