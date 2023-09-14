@@ -12,7 +12,10 @@ Alunos do curso de graduação de engenharia de computação
 
 FILE* init_bin(FILE* bin){
 
-
+    unsigned char *data = "lucas 11 12 15"; 
+    for (int i = 0; i < sizeof(data); i++) {
+        fwrite(&data[i], sizeof(data[i]), 1, bin);
+    }
 
     return bin;
 }
@@ -25,14 +28,28 @@ FILE *archive_open(const char *nameArchive)
     return file;
 }
 
-void printar_binario()
+void printarRNN(FILE* bin,int RNN){
+
+
+    unsigned char byte;
+    while (fread(&byte, sizeof(byte), 1, bin) == 1) {
+        printf("Byte lido: %c\n", byte);
+    }
+
+
+}
+
+void printar_binario(FILE* bin)
 {
+    int RNN = 3;
+
+    printarRNN(bin,RNN);
 }
 
 short int functionality_1(const char *csvArchiveName, const char *binArchiveName)
 {
     FILE *csv = archive_open(csvArchiveName); // buscar o csv
-    FILE *bin = fopen(binArchiveName, 'w');   // criar o bin
+    FILE *bin = fopen(binArchiveName, "wb");   // criar o bin
 
     if (csv == NULL || bin == NULL)
     {
@@ -42,13 +59,17 @@ short int functionality_1(const char *csvArchiveName, const char *binArchiveName
     //  -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - --
     //  leitura de entrada de decisão:
     bin = init_bin(bin);
+    fclose(bin);
+
+    bin = fopen(binArchiveName, "rb");   // abrir no modo leitura
 
     int technology_number = 0;
     int even_technology_number = 0;
     
 
     fclose(csv);
-    printar_binario();
+    // printar_binario(bin);
+    printarRNN(bin,0);
     fclose(bin);
     return 0;
 }
@@ -69,8 +90,12 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
-    const char *csvArchiveName = argv[2];
-    const char *binArchiveName = argv[3];
+    // const char *csvArchiveName = argv[2];
+    // const char *binArchiveName = argv[3];
+
+    const char *csvArchiveName = "stack_network_links.csv";
+    const char *binArchiveName = "output_file.bin";
+
     switch (decision)
     {
     case '1':
