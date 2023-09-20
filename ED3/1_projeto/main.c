@@ -3,16 +3,16 @@
 Dados dos integrantes:
 
     -> Lucas Sales Duarte - 11734490
-    -> João Victor de Almeida 13695424
+    -> João Victor de Almeida - 13695424
 Alunos do curso de graduação de engenharia de computação
 */
+#include <stdio.h>
 
 #define LIXO "$"
 #define TAM_REGISTRO_FIXO 21
 #define TAM_REGISTRO 76
 
 
-#include <stdio.h>
 
 typedef struct main
 {
