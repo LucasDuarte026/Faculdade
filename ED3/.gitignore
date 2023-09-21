@@ -1,5 +1,2 @@
-.vscode/
-1_projeto/output_file.bin
-main.exe
-main
-output_file.bin
+1_projeto/main.exe
+1_projeto/valgrind
