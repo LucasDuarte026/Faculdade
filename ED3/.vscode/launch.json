@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "lucas debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/1_projeto/main",
+            "args": [
+
+
+                // insira aqui os parametros de entrada
+                "1",
+                "text",
+                "text"],
+
+
+
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/1_projeto",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
