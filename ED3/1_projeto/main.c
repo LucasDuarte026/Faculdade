@@ -14,6 +14,8 @@ Alunos do curso de graduação de engenharia de computação
 
 
 
+
+
 typedef struct main
 {
     //13 bytes em status e 4 bytes no resto
@@ -41,6 +43,7 @@ typedef struct{
 }aaaa;
 
 FILE* init_bin(FILE* bin){
+
 
     unsigned char *data = "lucas 11 12 15"; 
     for (int i = 0; i < sizeof(data); i++) {
@@ -72,6 +75,7 @@ void printarRNN(FILE* bin,int RNN){
 void printar_binario(FILE* bin)
 {
     int RNN = 3;
+
     printarRNN(bin,RNN);
 }
 
