@@ -3,14 +3,47 @@
 Dados dos integrantes:
 
     -> Lucas Sales Duarte - 11734490
-    ->
+    -> João Victor de Almeida - 13695424
 Alunos do curso de graduação de engenharia de computação
 */
-
 #include <stdio.h>
 
+#define LIXO "$"
+#define TAM_REGISTRO_FIXO 21
+#define TAM_REGISTRO 76
+
+
+
+
+
+typedef struct main
+{
+    //13 bytes em status e 4 bytes no resto
+    char status; 
+    int proxRRN;
+    int nroTecnologia;
+    int nroParesTecnologia;
+}Cabecalho;
+
+typedef struct{
+
+    int tamanho;
+    char* string;
+
+}StringVariavel;
+
+typedef struct{
+    
+    char removido;
+
+    int grupo;
+    int popuralidade;
+    //Complementar, nao consegui acompanhar ... 
+
+}aaaa;
 
 FILE* init_bin(FILE* bin){
+
 
     unsigned char *data = "lucas 11 12 15"; 
     for (int i = 0; i < sizeof(data); i++) {
