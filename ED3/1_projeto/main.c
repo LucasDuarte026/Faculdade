@@ -7,46 +7,46 @@ Dados dos integrantes:
 Alunos do curso de graduação de engenharia de computação
 */
 #include <stdio.h>
+#include <string.h>
 
 #define LIXO "$"
 #define TAM_REGISTRO_FIXO 21
 #define TAM_REGISTRO 76
 
-
-
-
-
 typedef struct main
 {
-    //13 bytes em status e 4 bytes no resto
-    char status; 
+    // 13 bytes em status e 4 bytes no resto
+    char status;
     int proxRRN;
     int nroTecnologia;
     int nroParesTecnologia;
-}Cabecalho;
+} Cabecalho;
 
-typedef struct{
+typedef struct
+{
 
     int tamanho;
-    char* string;
+    char *string;
 
-}StringVariavel;
+} StringVariavel;
 
-typedef struct{
-    
+typedef struct
+{
+
     char removido;
 
     int grupo;
     int popuralidade;
-    //Complementar, nao consegui acompanhar ... 
+    // Complementar, nao consegui acompanhar ...
 
-}aaaa;
+} aaaa;
 
-FILE* init_bin(FILE* bin){
+FILE *init_bin(FILE *bin)
+{
 
-
-    unsigned char *data = "lucas 11 12 15"; 
-    for (int i = 0; i < sizeof(data); i++) {
+    unsigned char data[] = "lucas 11 12 15";
+    for (int i = 0; i < sizeof(data); i++)
+    {
         fwrite(&data[i], sizeof(data[i]), 1, bin);
     }
 
@@ -54,38 +54,38 @@ FILE* init_bin(FILE* bin){
 }
 FILE *archive_open(const char *nameArchive)
 {
-    // entrada do arquivoe seu retorno em ponteiro
+    // entrada do arquivos seu retorno em ponteiro
     FILE *file;
     file = fopen(nameArchive, "r");
 
     return file;
 }
 
-void printarRNN(FILE* bin,int RNN){
-
+void printarRNN(FILE *bin, int RNN)
+{
 
     unsigned char byte;
-    while (fread(&byte, sizeof(byte), 1, bin) == 1) {
+    while (fread(&byte, sizeof(byte), 1, bin) == 1)
+    {
         printf("Byte lido: %c\n", byte);
     }
-
-
 }
 
-void printar_binario(FILE* bin)
+void printar_binario(FILE *bin)
 {
     int RNN = 3;
 
-    printarRNN(bin,RNN);
+    printarRNN(bin, RNN);
 }
 
-short int functionality_1(const char *csvArchiveName, const char *binArchiveName)
+short int functionality_1(const char csvArchiveName[], const char binArchiveName[])
 {
     FILE *csv = archive_open(csvArchiveName); // buscar o csv
-    FILE *bin = fopen(binArchiveName, "wb");   // criar o bin
+    FILE *bin = fopen(binArchiveName, "wb");  // criar o bin
 
     if (csv == NULL || bin == NULL)
     {
+        printf("\nainda nada\n");
         return 1; // Caso o csv não seja encontrado ou o bin não criado, passa 1 DE ERRO para o file
     }
 
@@ -94,20 +94,20 @@ short int functionality_1(const char *csvArchiveName, const char *binArchiveName
     bin = init_bin(bin);
     fclose(bin);
 
-    bin = fopen(binArchiveName, "rb");   // abrir no modo leitura
+    bin = fopen(binArchiveName, "rb"); // abrir no modo leitura
 
     int technology_number = 0;
     int even_technology_number = 0;
-    
 
     fclose(csv);
     // printar_binario(bin);
-    printarRNN(bin,0);
+    printarRNN(bin, 0);
     fclose(bin);
     return 0;
 }
 
 int main(int argc, char const *argv[])
+
 {
 
     printf("\n-------- -------- -------- -------- -------- \n\n"); // apagar ao fim
@@ -123,16 +123,20 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
-    // const char *csvArchiveName = argv[2];
-    // const char *binArchiveName = argv[3];
+    const char *argumento_1 = argv[1];
+    const char *argumento_2 = argv[2];
+    const char *argumento_3 = argv[3];
 
-    const char *csvArchiveName = "stack_network_links.csv";
-    const char *binArchiveName = "output_file.bin";
+    printf("os argumentos são %s\t%s\t%s\n", argumento_1, argumento_2, argumento_3);
+
+    
+    const char csvArchiveName[] = "tecnologia.csv";
+    const char binArchiveName[] = "output_file.bin";
 
     switch (decision)
     {
     case '1':
-        if (functionality_1(csvArchiveName, binArchiveName) == 1)
+        if (functionality_1(csvArchiveName, binArchiveName))
         {
             printf("\nFalha no processamento do arquivo.");
         };
@@ -156,6 +160,7 @@ int main(int argc, char const *argv[])
     // fopen
 
     //  -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - --
+    printf("\n\t\tSucesso\n"); // apagar ao fim
     printf("\n\n-------- -------- -------- -------- -------- \n"); // apagar ao fim
     return 0;
 }
