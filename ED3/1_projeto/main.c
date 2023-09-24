@@ -190,7 +190,7 @@ void printar_binario(FILE *bin)
 }
 
 
-Dados LerRegistroCSV(FILE *csv){
+Dados LerRegistroCSV(FILE *csv){ // le o registro
     Dados dados;
     char buffer[100];
 
@@ -198,20 +198,21 @@ Dados LerRegistroCSV(FILE *csv){
     dados.nomeTecnologiaOrigem.string = NULL;
     dados.nomeTecnologiaDestino.string = NULL;
 
-     fscanf(csv, "%d,%d,%d,", &dados.grupo, &dados.popularidade, &dados.peso);
+    fscanf(csv, "%d,%d,%d,", &dados.grupo, &dados.popularidade, &dados.peso);
     scan_quote_string(buffer);
     dados.nomeTecnologiaOrigem.tamanho = strlen(buffer);
     dados.nomeTecnologiaOrigem.string = strdup(buffer);
-    scan_quote_string(buffer);
-    dados.nomeTecnologiaDestino.tamanho = strlen(buffer);
-    dados.nomeTecnologiaDestino.string = strdup(buffer);
+    // scan_quote_string(buffer);
+    // dados.nomeTecnologiaDestino.tamanho = strlen(buffer);
+    // dados.nomeTecnologiaDestino.string = strdup(buffer);
 
     return dados;
 }
 
 
 short int functionality_1(const char csvArchiveName[], const char binArchiveName[])
-{
+{   
+    printf("\n\n\tcsv:%s\t\tbinary:\t%s\n",csvArchiveName,binArchiveName);
     FILE *csv = archive_open(csvArchiveName); // buscar o csv
     FILE *bin = fopen(binArchiveName, "wb+");  // criar o bin
 
@@ -233,12 +234,13 @@ short int functionality_1(const char csvArchiveName[], const char binArchiveName
 
         Atualizar_Cabecalho(bin, 1, 1); //Aqui ajustar ainda !!!!!!---
 
-        fclose(csv);
-        fclose(bin);
-
-        binarioNaTela(binArchiveName);
-        return 0;
+        
     }
+    fclose(csv);
+    fclose(bin);
+
+    binarioNaTela(binArchiveName);
+    return 0;
 }
 
 int main(int argc, char const *argv[])
@@ -265,11 +267,11 @@ int main(int argc, char const *argv[])
     printf("os argumentos são \t%s\t%s\t%s\n", argumento_1, argumento_2, argumento_3);
 
     
-    // const char csvArchiveName[] = "tecnologia.csv";   // inserção manual do nome dos arquivos para debug
-    // const char binArchiveName[] = "output_file.bin";  // inserção manual do nome dos arquivos para debug
+    const char csvArchiveName[] = "tecnologia_curtoTESTE.csv";   // inserção manual do nome dos arquivos para debug
+    const char binArchiveName[] = "output_file.bin";  // inserção manual do nome dos arquivos para debug
 
-    const char *csvArchiveName = argumento_2;
-    const char *binArchiveName = argumento_3;
+    // const char *csvArchiveName = argumento_2;
+    // const char *binArchiveName = argumento_3;
     switch (decision)
     {
     case '1':
