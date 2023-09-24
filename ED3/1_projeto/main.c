@@ -262,12 +262,14 @@ int main(int argc, char const *argv[])
     const char *argumento_2 = argv[2];
     const char *argumento_3 = argv[3];
 
-    printf("os argumentos são %s\t%s\t%s\n", argumento_1, argumento_2, argumento_3);
+    printf("os argumentos são \t%s\t%s\t%s\n", argumento_1, argumento_2, argumento_3);
 
     
-    const char csvArchiveName[] = "tecnologia.csv";
-    const char binArchiveName[] = "output_file.bin";
+    // const char csvArchiveName[] = "tecnologia.csv";   // inserção manual do nome dos arquivos para debug
+    // const char binArchiveName[] = "output_file.bin";  // inserção manual do nome dos arquivos para debug
 
+    const char *csvArchiveName = argumento_2;
+    const char *binArchiveName = argumento_3;
     switch (decision)
     {
     case '1':

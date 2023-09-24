@@ -11,8 +11,8 @@
 
                 // insira aqui os parametros de entrada
                 "1",
-                "text",
-                "abluble"
+                "tecnologia.csv",
+                "output_file.bin"
             ],
 
 
