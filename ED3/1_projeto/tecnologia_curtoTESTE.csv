@@ -1,0 +1,9 @@
+nomeTecnologiaOrigem,grupo,popularidade,nomeTecnologiaDestino,peso
+AZURE,2,14,.NET,22
+SQL-SERVER,2,65,.NET,33
+ASP.NET,2,130,.NET,6
+ENTITY-FRAMEWORK,2,13,.NET,3
+WPF,2,19,.NET,4
+LINQ,2,8,.NET,22
+WCF,2,13,.NET,29
+C#,2,321,.NET,63
