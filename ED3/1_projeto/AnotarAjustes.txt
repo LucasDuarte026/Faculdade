@@ -8,3 +8,18 @@ Sexta-Feira 22/09 - Baile:
 
 --------------------------
 
+Quarta-Feira 26/09 - Baile:
+
+Void Recuperar_DadosImplementado, dar uma olhada e também
+ai embaixo deixei uma "descrição" do que o código faz...:
+
+-Ela o arquivo binário e dá uma olhada no cabeçalho pra ver se tá tudo certo.
+-Depois, ela vai passando por cada registro do arquivo.
+-Se o registro não estiver marcado como removido (sabe aquele campo removido que usamos?),
+ela mostra os detalhes do registro na tela.
+-Ah, e ela também lida com aqueles registros de tamanho variável que a gente tinha falado.
+E ela libera memoria depois de usada.
+
+Fechei essa parte! Qualquer coisa, me dá um toque.
+
+----------------------------------
