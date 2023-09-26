@@ -208,7 +208,7 @@
 
             dados.nomeTecnologiaDestino.tamanho = strlen(bufferDestino);
             dados.nomeTecnologiaDestino.string = strdup(bufferDestino);
-                printf("%s,%d,%d,%s,%d\n",  dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso);
+                // printf("%s,%d,%d,%s,%d\n",  dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso);
         }
 
         return dados;
@@ -271,17 +271,17 @@
 
     short int functionality_1(const char csvArchiveName[], const char binArchiveName[])
     {
-        printf("\n\n\tcsv:%s\t\tbinary:\t%s\n", csvArchiveName, binArchiveName);
+        // printf("\n\n\tcsv:%s\t\tbinary:\t%s\n", csvArchiveName, binArchiveName);
         FILE *csv = fopen(csvArchiveName, "r");  // buscar o csv
         FILE *bin = fopen(binArchiveName, "wb+"); // criar o bin
 
         if (csv == NULL || bin == NULL)
         {
-            printf("\nainda nada\n");
-            return 1; // Caso o csv não seja encontrado ou o bin não criado, passa 1 DE ERRO para o file
+            printf("\nErro de arquivos (ponteriro)\n");   // documentar
+            return 1;           // Caso o csv não seja encontrado ou o bin não criado, passa 1 DE ERRO para o file
         }
 
-        bin = init_bin(bin); // inicializar o bin
+        bin = init_bin(bin);    // inicializar o bin
 
         Dados dados;
 
