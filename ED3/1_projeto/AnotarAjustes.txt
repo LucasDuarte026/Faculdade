@@ -2,7 +2,7 @@
 Sexta-Feira 22/09 - Baile:
 
 -Fiz ajuste na "init_bin", dar uma olhada
-- Criei a função "Autualizar_Cabecalho" para atualizar o cabeçalho do arquivo binário
+- Criei a função "Atualizar_Cabecalho" para atualizar o cabeçalho do arquivo binário
 - Criei a funçao "Escrever Dados", dar uma olhada
 - Criei "Ler_RegistroCSV", dar uma olhada
 
