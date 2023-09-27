@@ -8,7 +8,8 @@ Sexta-Feira 22/09 - Baile:
 
 --------------------------
 
-Quarta-Feira 26/09 - Baile:
+
+Terça feira 26/09 - Baile:
 
 Void Recuperar_DadosImplementado, dar uma olhada e também
 ai embaixo deixei uma "descrição" do que o código faz...:
@@ -21,5 +22,11 @@ ela mostra os detalhes do registro na tela.
 E ela libera memoria depois de usada.
 
 Fechei essa parte! Qualquer coisa, me dá um toque.
+
+----------------------------------
+
+Terça feira 26/09 - Charles:
+
+Implementei parte da functionality 1 com tentativa de contar o numero de tecnologias
 
 ----------------------------------
