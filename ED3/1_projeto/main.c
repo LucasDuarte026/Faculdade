@@ -16,7 +16,7 @@
     #define MAX_STRING_LENGTH 100
 
     typedef struct
-    { // 13 bytes em status e 4 bytes no resto
+    {
         char status;
         int proxRRN;
         int nroTecnologia;
@@ -27,18 +27,16 @@
     {
         int tamanho;
         char *string;
-
     } StringVariavel;
 
     typedef struct
     {
-        char removido;                        // 1 byte
-        int grupo;                            // 4 bytes
-        int popularidade;                     // 4 bytes
-        int peso;                             // 4 bytes
-        StringVariavel nomeTecnologiaOrigem;  // tamanho variável
-        StringVariavel nomeTecnologiaDestino; // tamanho variável
-
+        char removido;
+        int grupo;
+        int popularidade;
+        int peso;
+        StringVariavel nomeTecnologiaOrigem;
+        StringVariavel nomeTecnologiaDestino;
     } Dados;
 
     void readline(char *string)
@@ -143,78 +141,73 @@
 
     // !!
     FILE *init_bin(FILE *bin)
+{
+    Cabecalho cabecalho;
+    cabecalho.status = '0';
+    cabecalho.proxRRN = 0;
+    cabecalho.nroParesTecnologia = 0;
+    cabecalho.nroTecnologia = 0;
+
+    fwrite(&cabecalho.status, sizeof(char), 1, bin);
+
+    return bin;
+}
+
+void Atualizar_Cabecalho(FILE *bin, int nroTecnologia, int nroParesTecnologia, int prox)
+{
+    Cabecalho cabecalho;
+    fseek(bin, 0, SEEK_SET);
+    fread(&cabecalho, sizeof(Cabecalho), 1, bin);
+
+    cabecalho.status = '1';
+    cabecalho.proxRRN = prox;
+    cabecalho.nroTecnologia = nroTecnologia;
+    cabecalho.nroParesTecnologia = nroParesTecnologia;
+
+    fseek(bin, 0, SEEK_SET);
+    fwrite(&cabecalho, sizeof(Cabecalho), 1, bin);
+}
+
+void Escrever_Dados(FILE *bin, Dados dados)
+{
+    fwrite(&dados.removido, sizeof(char), 1, bin);
+    fwrite(&dados.grupo, sizeof(int), 1, bin);
+    fwrite(&dados.popularidade, sizeof(int), 1, bin);
+    fwrite(&dados.peso, sizeof(int), 1, bin);
+    
+    fwrite(&dados.nomeTecnologiaOrigem.tamanho, sizeof(int), 1, bin);
+    fwrite(dados.nomeTecnologiaOrigem.string, sizeof(char), dados.nomeTecnologiaOrigem.tamanho, bin);
+    
+    fwrite(&dados.nomeTecnologiaDestino.tamanho, sizeof(int), 1, bin);
+    fwrite(dados.nomeTecnologiaDestino.string, sizeof(char), dados.nomeTecnologiaDestino.tamanho, bin);
+}
+
+Dados LerRegistroCSV(FILE *csv)
+{
+    Dados dados;
+    dados.removido = '-';
+    dados.nomeTecnologiaOrigem.string = NULL;
+    dados.nomeTecnologiaOrigem.tamanho = 0;
+    dados.nomeTecnologiaDestino.string = NULL;
+    dados.nomeTecnologiaDestino.tamanho = 0;
+
+    char bufferOrigem[MAX_STRING_LENGTH];
+    char bufferDestino[MAX_STRING_LENGTH];
+
+    if (fscanf(csv, " %[^,],%d,%d, %[^,],%d", bufferOrigem, &dados.grupo, &dados.popularidade, bufferDestino, &dados.peso) == 5)
     {
-        Cabecalho cabecalho;
-        cabecalho.status = '0';
-        cabecalho.proxRRN = 0;
-        cabecalho.nroParesTecnologia = 0;
-        cabecalho.nroTecnologia = 0;
+        dados.nomeTecnologiaOrigem.tamanho = strlen(bufferOrigem);
+        dados.nomeTecnologiaOrigem.string = strdup(bufferOrigem);
 
-        fwrite(&cabecalho.status, sizeof(char), 1, bin);
-
-        return bin;
+        dados.nomeTecnologiaDestino.tamanho = strlen(bufferDestino);
+        dados.nomeTecnologiaDestino.string = strdup(bufferDestino);
+        printf("%s,%d,%d,%s,%d\n",  dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso);
     }
 
-    void Atualizar_Cabecalho(FILE *bin, int nroTecnologia, int nroParesTecnologia, int prox)
-    {
-        Cabecalho cabecalho;
-        fseek(bin, 0, SEEK_SET); // volta para o inicio
-        fread(&cabecalho, sizeof(Cabecalho), 1, bin);
+    return dados;
+}
 
-        cabecalho.status = '1';
-        cabecalho.proxRRN = prox;
-        cabecalho.nroTecnologia = nroTecnologia;
-        cabecalho.nroParesTecnologia = nroParesTecnologia;
-
-        fseek(bin, 0, SEEK_SET); // volta para o inicio
-        fwrite(&cabecalho, sizeof(Cabecalho), 1, bin);
-    }
-
-    // funcao nova
-    void Escrever_Dados(FILE *bin, Dados dados)
-    {
-        fwrite(&dados.removido, sizeof(char), 1, bin);
-        fwrite(&dados.grupo, sizeof(int), 1, bin);
-        fwrite(&dados.popularidade, sizeof(int), 1, bin);
-        fwrite(&dados.peso, sizeof(int), 1, bin);
-        fwrite(&dados.nomeTecnologiaOrigem.tamanho, sizeof(int), 1, bin);
-        fwrite(&dados.nomeTecnologiaOrigem.string, sizeof(char), dados.nomeTecnologiaOrigem.tamanho, bin);
-        fwrite(&dados.nomeTecnologiaDestino.tamanho, sizeof(int), 1, bin);
-        fwrite(&dados.nomeTecnologiaDestino.string, sizeof(char), dados.nomeTecnologiaDestino.tamanho, bin);
-    }
-
-    Dados LerRegistroCSV(FILE *csv)
-    { // le o registro
-        Dados dados;
-        dados.removido = '-';
-        dados.nomeTecnologiaOrigem.string = NULL;
-        dados.nomeTecnologiaOrigem.tamanho = 0;
-        dados.nomeTecnologiaDestino.string = NULL;
-        dados.nomeTecnologiaDestino.tamanho = 0;
-
-        char *nomeTecnologiaOrigem;
-        int grupo;
-        int popularidade;
-        char *nomeTecnologiaDestino;
-        int peso;
-
-        char bufferOrigem[MAX_STRING_LENGTH];
-        char bufferDestino[MAX_STRING_LENGTH];
-
-        if (fscanf(csv, " %[^,],%d,%d, %[^,],%d", bufferOrigem, &dados.grupo, &dados.popularidade, bufferDestino, &dados.peso) == 5)
-        {
-            dados.nomeTecnologiaOrigem.tamanho = strlen(bufferOrigem); // documentar pq funciona
-            dados.nomeTecnologiaOrigem.string = strdup(bufferOrigem);
-
-            dados.nomeTecnologiaDestino.tamanho = strlen(bufferDestino);
-            dados.nomeTecnologiaDestino.string = strdup(bufferDestino);
-                printf("%s,%d,%d,%s,%d\n",  dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso);
-        }
-
-        return dados;
-    }
-
-    void Recuperar_Dados(const char binArchiveName[]) {
+    void functionality_2(const char binArchiveName[]) {
         FILE *bin = fopen(binArchiveName, "rb"); // abrir o bin para leitura
         if (bin == NULL) {
             printf("\nFalha no processamento do arquivo.\n");
@@ -250,12 +243,12 @@
             dados.nomeTecnologiaDestino.string[dados.nomeTecnologiaDestino.tamanho] = '\0';
 
             // Exibir os dados
-           // printf("Grupo: %d\n", dados.grupo);
-            //printf("Popularidade: %d\n", dados.popularidade);
-            //printf("Peso: %d\n", dados.peso);
-            //printf("Nome Tecnologia Origem: %s\n", dados.nomeTecnologiaOrigem.string);
-            //printf("Nome Tecnologia Destino: %s\n", dados.nomeTecnologiaDestino.string);
-            //printf("-------------------------------\n");
+            printf("Grupo: %d\n", dados.grupo);
+            printf("Popularidade: %d\n", dados.popularidade);
+            printf("Peso: %d\n", dados.peso);
+            printf("Nome Tecnologia Origem: %s\n", dados.nomeTecnologiaOrigem.string);
+            printf("Nome Tecnologia Destino: %s\n", dados.nomeTecnologiaDestino.string);
+            printf("-------------------------------\n");
 
             // Liberar memória alocada para strings
             free(dados.nomeTecnologiaOrigem.string);
@@ -270,41 +263,118 @@
 }
 
     short int functionality_1(const char csvArchiveName[], const char binArchiveName[])
+{
+    printf("\n\n\tcsv:%s\t\tbinary:\t%s\n", csvArchiveName, binArchiveName);
+    FILE *csv = fopen(csvArchiveName, "r");
+    FILE *bin = fopen(binArchiveName, "wb+");
+
+    if (csv == NULL || bin == NULL)
     {
-        printf("\n\n\tcsv:%s\t\tbinary:\t%s\n", csvArchiveName, binArchiveName);
-        FILE *csv = fopen(csvArchiveName, "r");  // buscar o csv
-        FILE *bin = fopen(binArchiveName, "wb+"); // criar o bin
+        printf("\nainda nada\n");
+        return 1;
+    }
 
-        if (csv == NULL || bin == NULL)
-        {
-            printf("\nainda nada\n");
-            return 1; // Caso o csv não seja encontrado ou o bin não criado, passa 1 DE ERRO para o file
-        }
+    bin = init_bin(bin);
 
-        bin = init_bin(bin); // inicializar o bin
+    Dados dados;
 
+    char headerLine[MAX_STRING_LENGTH];
+    fgets(headerLine, sizeof(headerLine), csv);
+
+    int nroTecnologia = 0;
+    int nroParesTecnologia = 0;
+    int proxRRN = 0;
+
+    while (!feof(csv))
+    {
+        dados = LerRegistroCSV(csv);
+        Escrever_Dados(bin, dados);
+
+        nroTecnologia++;
+        nroParesTecnologia++;
+
+        free(dados.nomeTecnologiaOrigem.string);
+        free(dados.nomeTecnologiaDestino.string);
+    }
+
+    Atualizar_Cabecalho(bin, nroTecnologia, nroParesTecnologia, proxRRN);
+    fclose(csv);
+    fclose(bin);
+
+    binarioNaTela(binArchiveName);
+    return 0;
+}
+
+    void functionality_3(const char binArchiveName[], int n) {
+    FILE *bin = fopen(binArchiveName, "rb");
+    if (bin == NULL) {
+        printf("\nFalha no processamento do arquivo.\n");
+        return;
+    }
+
+    Cabecalho cabecalho;
+    fread(&cabecalho, sizeof(Cabecalho), 1, bin);
+
+    if (cabecalho.status == '0') {
+        printf("\nArquivo binário não está consistente.\n");
+        fclose(bin);
+        return;
+    }
+
+    for (int i = 0; i < n; i++) {
+        char nomeCampo[MAX_STRING_LENGTH];
+        char valorCampo[MAX_STRING_LENGTH];
+        scanf("%s", nomeCampo);
+        scan_quote_string(valorCampo);
+
+        int found = 0;
         Dados dados;
 
-        char headerLine[MAX_STRING_LENGTH];
-        fgets(headerLine, sizeof(headerLine), csv); // pular a primeira linha
-        while (!feof(csv))
-        {
-            dados = LerRegistroCSV(csv);
-            Escrever_Dados(bin, dados);
+        fseek(bin, sizeof(Cabecalho), SEEK_SET);
 
-            free(dados.nomeTecnologiaOrigem.string);
-            free(dados.nomeTecnologiaDestino.string);
+        while (fread(&dados.removido, sizeof(char), 1, bin)) {
+            if (dados.removido == '-') {
+                fread(&dados.grupo, sizeof(int), 1, bin);
+                fread(&dados.popularidade, sizeof(int), 1, bin);
+                fread(&dados.peso, sizeof(int), 1, bin);
 
-            // int proxRNN = 10;
-            // Atualizar_Cabecalho(bin, 1, 1, proxRNN); // Aqui ajustar ainda !!!!!!---
-            // init = 0;
+                fread(&dados.nomeTecnologiaOrigem.tamanho, sizeof(int), 1, bin);
+                dados.nomeTecnologiaOrigem.string = (char *)malloc(dados.nomeTecnologiaOrigem.tamanho + 1);
+                fread(dados.nomeTecnologiaOrigem.string, sizeof(char), dados.nomeTecnologiaOrigem.tamanho, bin);
+                dados.nomeTecnologiaOrigem.string[dados.nomeTecnologiaOrigem.tamanho] = '\0';
+
+                fread(&dados.nomeTecnologiaDestino.tamanho, sizeof(int), 1, bin);
+                dados.nomeTecnologiaDestino.string = (char *)malloc(dados.nomeTecnologiaDestino.tamanho + 1);
+                fread(dados.nomeTecnologiaDestino.string, sizeof(char), dados.nomeTecnologiaDestino.tamanho, bin);
+                dados.nomeTecnologiaDestino.string[dados.nomeTecnologiaDestino.tamanho] = '\0';
+
+                if ((strcmp(nomeCampo, "nomeTecnologiaOrigem") == 0 && strcmp(valorCampo, dados.nomeTecnologiaOrigem.string) == 0) ||
+                    (strcmp(nomeCampo, "nomeTecnologiaDestino") == 0 && strcmp(valorCampo, dados.nomeTecnologiaDestino.string) == 0) ||
+                    (strcmp(nomeCampo, "grupo") == 0 && atoi(valorCampo) == dados.grupo) ||
+                    (strcmp(nomeCampo, "popularidade") == 0 && atoi(valorCampo) == dados.popularidade) ||
+                    (strcmp(nomeCampo, "peso") == 0 && atoi(valorCampo) == dados.peso)) {
+                    printf("%s,%d,%d,%s,%d\n", dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso);
+                    found = 1;
+                }
+
+                free(dados.nomeTecnologiaOrigem.string);
+                free(dados.nomeTecnologiaDestino.string);
+            } else {
+                fseek(bin, TAM_REGISTRO - sizeof(char), SEEK_CUR);
+            }
         }
-        fclose(csv);
-        fclose(bin);
 
-        binarioNaTela(binArchiveName);
-        return 0;
+        if (!found) {
+            printf("Registro inexistente.\n");
+        }
     }
+
+    fclose(bin);
+}
+
+
+
+
 
     int main(int argc, char const *argv[])
     {
@@ -328,7 +398,7 @@
 
         printf("os argumentos são \t%s\t%s\t%s\n", argumento_1, argumento_2, argumento_3);
 
-        const char csvArchiveName[] = "tecnologia.csv";  // inserção manual do nome dos arquivos para debug
+        const char csvArchiveName[] = "tecnologia_curtoTESTE.csv";  // inserção manual do nome dos arquivos para debug
         const char binArchiveName[] = "output_file.bin"; // inserção manual do nome dos arquivos para debug
 
         // const char *csvArchiveName = argumento_2;
@@ -342,11 +412,13 @@
             };
             break;
       case '2': // Supondo que a opção 2 seja para recuperar e exibir os dados
-            Recuperar_Dados(binArchiveName);
+            functionality_2(binArchiveName);
             break;
 
         case '3':
-            /* code */
+            int n;
+            scanf("%d", &n);
+            functionality_3(binArchiveName, n);
             break;
         case '4':
             /* code */

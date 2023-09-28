@@ -23,3 +23,8 @@ E ela libera memoria depois de usada.
 Fechei essa parte! Qualquer coisa, me dá um toque.
 
 ----------------------------------
+
+Quinta feira 28/09 - Baile:
+
+- Fiz a funcionalidade 3 também,entretanto preciso ajustar a 1 e também fiz a
+funcionalidade 2 e 3.
