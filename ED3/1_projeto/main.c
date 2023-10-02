@@ -214,48 +214,45 @@ Dados LerRegistroCSV(FILE *csv)
 
 char **testa_unico(int *prt_quant_tec, Dados dado, char **tecnologies)
 {
-    int quant_tec = *prt_quant_tec;
+    int quant_tec = *prt_quant_tec;     // Pega o valor do ponteiro
     for (int i = 0; i < quant_tec; i++)
     {
 
-        if (strcmp(tecnologies[i], dado.nomeTecnologiaOrigem.string) == 0)
+        if (strcmp(tecnologies[i], dado.nomeTecnologiaOrigem.string) == 0) // testa se já existe
         {
             return tecnologies; //  Retorna o vetor da mesma forma
         }
     }
 
-    quant_tec++;
+    quant_tec++;        //  Soma um na quantidade
     tecnologies = realloc(tecnologies, quant_tec * sizeof(char *)); //  Incrementa quant_tec e realoca tecnologias com um tamanho maior
     tecnologies[quant_tec - 1] = dado.nomeTecnologiaOrigem.string;  //  Armazena de fato a tecnologia no no local
-    *prt_quant_tec = quant_tec;
+    *prt_quant_tec = quant_tec;     // Passa pro ponteiro
     return tecnologies;
 }
 
 char **testa_par(int *prt_quant_tec_par, Dados dado, char **pares)
 {
-    int stringConcatMaxSize = strlen(dado.nomeTecnologiaDestino.string) + strlen(dado.nomeTecnologiaOrigem.string)+1;
+    int stringConcatMaxSize = strlen(dado.nomeTecnologiaDestino.string) + strlen(dado.nomeTecnologiaOrigem.string) + 1;
     char aux[stringConcatMaxSize];
-    // strcpy(aux, "");
-    strcat(aux, dado.nomeTecnologiaOrigem.string);
-    strcat(aux, dado.nomeTecnologiaDestino.string);
-    strcat(aux, "\0");
-    printf("\n\naux da vez eh:\t%s\n", aux);
-    int quant_tec_par = *prt_quant_tec_par;
+    strcpy(aux, dado.nomeTecnologiaOrigem.string);  // Copia origem na aux
+    strcat(aux, dado.nomeTecnologiaDestino.string); // Concatena o destino
+
+    int quant_tec_par = *prt_quant_tec_par;         //  Pega o ponteiro
     for (int i = 0; i < quant_tec_par; i++)
     {
-        if (strcmp(pares[i], aux) == 0)
+        if (strcmp(pares[i], aux) == 0)             // Testa se existe
         {
-            return pares; //  Retorna o vetor da mesma forma
+            return pares;                           // Sai se existir
         }
     }
 
-    quant_tec_par++;
-    pares = realloc(pares, quant_tec_par * sizeof(char *)); //  Incrementa quant_tec_par e realoca tecnologias com um tamanho maior
-    pares[quant_tec_par - 1] = aux;                         //  Armazena de fato a tecnologia no no local
-    printf("\n\naux 2:\t%s\n", aux);
-    printf("\n\naux 3 :\t%s\n", pares[quant_tec_par - 1]);
+    quant_tec_par;      // soma um na quantidade
+    pares = realloc(pares, quant_tec_par * sizeof(char *)); // realoca dinamicamente
+    pares[quant_tec_par - 1] = malloc(strlen(aux) + 1); // Aloca memória para a nova string
+    strcpy(pares[quant_tec_par - 1], aux);              // Copia o conteúdo de aux para a nova memória alocada
 
-    *prt_quant_tec_par = quant_tec_par;
+    *prt_quant_tec_par = quant_tec_par;                 // Passa pro ponteiro 
     return pares;
 }
 
@@ -272,7 +269,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
         return 1; // Caso o csv não seja encontrado ou o bin não criado, passa 1 DE ERRO para o file
     }
 
-    // bin = init_bin(bin); // inicializar o bin
+    bin = init_bin(bin); // inicializar o bin
 
     int proxRNN = 0; //  armazena onde está o prox RNN
 
@@ -287,26 +284,23 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
     {
         Dados dados;
         dados = LerRegistroCSV(csv); //  Lê o arquivo linha a linha e armazana em dados
-        Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário
+        Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário  
         tecnologies = testa_unico(&quant_tec, dados, tecnologies);
         pares = testa_par(&duplicade_quant_tec, dados, pares);
 
         // for (int i = 0; i < quant_tec; i++){printf("quant_tec:|%d|\ti:%d\t%s\n", quant_tec, i, tecnologies[i]);} // mostrar os dados
-        for (int i = 0; i < duplicade_quant_tec; i++)
-        {
-            printf("quant_tec:|%d|\ti:%d\t%s\n", duplicade_quant_tec, i, pares[i]);
-        } // mostrar os dados
 
         // for (int i = 0; i < quant_tec; i++)
         // {
         //     printf("tec:\t%s", tecnologies[i]);
         // }
 
-        // free(dados.nomeTecnologiaOrigem.string);  // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
-        // free(dados.nomeTecnologiaDestino.string); // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
+        free(dados.nomeTecnologiaOrigem.string);  // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
+        free(dados.nomeTecnologiaDestino.string); // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
         // free(dados);
         proxRNN++;
     }
+    printf("\nNumeros de tecnologia:\n\t-> Simples:\t|%d|\n\t-> Duplicado:\t|%d|\n",quant_tec,duplicade_quant_tec);                                       // mostrar os dados
     Atualizar_Cabecalho(bin, 1, 1, proxRNN); // Aqui ajustar ainda !!!!!!---
 
     fclose(bin); //  Fecha o arquivo binário
