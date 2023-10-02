@@ -206,29 +206,57 @@ Dados LerRegistroCSV(FILE *csv)
 
         dados.nomeTecnologiaDestino.tamanho = strlen(bufferDestino);
         dados.nomeTecnologiaDestino.string = strdup(bufferDestino);
-        printf("%s,%d,%d,%s,%d\n", dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso); // para ler os dados escritos
+        // printf("%s,%d,%d,%s,%d\n", dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso); // para ler os dados escritos
     }
 
     return dados;
 }
 
-short int detecta_exist(int quant_tec, Dados dado, char *tecnologies[])
+char **testa_unico(int *prt_quant_tec, Dados dado, char **tecnologies)
 {
-
-    for (int i = 0; i < 1000; i++)
+    int quant_tec = *prt_quant_tec;
+    for (int i = 0; i < quant_tec; i++)
     {
-        if (quant_tec == 0)
-        {
-            break;
-        }
 
-        if (tecnologies[i] == dado.nomeTecnologiaOrigem.string)
+        if (strcmp(tecnologies[i], dado.nomeTecnologiaOrigem.string) == 0)
         {
-            return 1; //  Retorna 1 se existir
+            return tecnologies; //  Retorna o vetor da mesma forma
         }
     }
 
-    return 0; //  Retorna 1 se não existir
+    quant_tec++;
+    tecnologies = realloc(tecnologies, quant_tec * sizeof(char *)); //  Incrementa quant_tec e realoca tecnologias com um tamanho maior
+    tecnologies[quant_tec - 1] = dado.nomeTecnologiaOrigem.string;  //  Armazena de fato a tecnologia no no local
+    *prt_quant_tec = quant_tec;
+    return tecnologies;
+}
+
+char **testa_par(int *prt_quant_tec_par, Dados dado, char **pares)
+{
+    int stringConcatMaxSize = strlen(dado.nomeTecnologiaDestino.string) + strlen(dado.nomeTecnologiaOrigem.string)+1;
+    char aux[stringConcatMaxSize];
+    // strcpy(aux, "");
+    strcat(aux, dado.nomeTecnologiaOrigem.string);
+    strcat(aux, dado.nomeTecnologiaDestino.string);
+    strcat(aux, "\0");
+    printf("\n\naux da vez eh:\t%s\n", aux);
+    int quant_tec_par = *prt_quant_tec_par;
+    for (int i = 0; i < quant_tec_par; i++)
+    {
+        if (strcmp(pares[i], aux) == 0)
+        {
+            return pares; //  Retorna o vetor da mesma forma
+        }
+    }
+
+    quant_tec_par++;
+    pares = realloc(pares, quant_tec_par * sizeof(char *)); //  Incrementa quant_tec_par e realoca tecnologias com um tamanho maior
+    pares[quant_tec_par - 1] = aux;                         //  Armazena de fato a tecnologia no no local
+    printf("\n\naux 2:\t%s\n", aux);
+    printf("\n\naux 3 :\t%s\n", pares[quant_tec_par - 1]);
+
+    *prt_quant_tec_par = quant_tec_par;
+    return pares;
 }
 
 short int Functionality_1(const char csvArchiveName[], const char binArchiveName[])
@@ -246,16 +274,13 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
 
     // bin = init_bin(bin); // inicializar o bin
 
-    int proxRNN = 0;                //  armazena onde está o prox RNN
-    int quant_tec = 0;              //  Contado para quantidade de tecnologias
-    int duplicade_quant_tec = 0;    //  Contado para quantidade de tecnologias duplicadas
-    short int change_cabecalho = 0; //  Flag para teste de mudança de cabecalho
-    char *tecnologies[300];         //  Supõe-se que o documento tenha menos do que 300 diferentes tecnologias
+    int proxRNN = 0; //  armazena onde está o prox RNN
 
-    for (int i = 0; i < 300; i++)
-    {
-        tecnologies[i] = ""; // Isso define cada elemento como uma string vazia
-    }
+    int quant_tec = 0;           //  Contado para quantidade de tecnologias
+    int duplicade_quant_tec = 0; //  Contado para quantidade de tecnologias duplicadas
+    char **tecnologies = NULL;   //  Inicializa um vetor que armazena ponteiros strings
+    char **pares = NULL;         //  Inicializa um vetor que armazena ponteiros strings dos pares
+
     char headerLine[MAX_STRING_LENGTH];         //  Cria o ponteiro que armazenará a primeira linha completa
     fgets(headerLine, sizeof(headerLine), csv); //  Pular a primeira linha
     while (!feof(csv))
@@ -263,26 +288,27 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
         Dados dados;
         dados = LerRegistroCSV(csv); //  Lê o arquivo linha a linha e armazana em dados
         Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário
+        tecnologies = testa_unico(&quant_tec, dados, tecnologies);
+        pares = testa_par(&duplicade_quant_tec, dados, pares);
 
-        // if (detecta_exist(quant_tec, dados, tecnologies) == 0)
+        // for (int i = 0; i < quant_tec; i++){printf("quant_tec:|%d|\ti:%d\t%s\n", quant_tec, i, tecnologies[i]);} // mostrar os dados
+        for (int i = 0; i < duplicade_quant_tec; i++)
+        {
+            printf("quant_tec:|%d|\ti:%d\t%s\n", duplicade_quant_tec, i, pares[i]);
+        } // mostrar os dados
+
+        // for (int i = 0; i < quant_tec; i++)
         // {
-        //     tecnologies[quant_tec] = dados.nomeTecnologiaOrigem.string;
-        //     quant_tec++;
+        //     printf("tec:\t%s", tecnologies[i]);
         // }
-        // if ()
-        // {
-        //     duplicade_quant_tec++;
-        // }
+
         // free(dados.nomeTecnologiaOrigem.string);  // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
         // free(dados.nomeTecnologiaDestino.string); // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
-
-        if (change_cabecalho)
-        {
-            Atualizar_Cabecalho(bin, 1, 1, proxRNN); // Aqui ajustar ainda !!!!!!---
-            !change_cabecalho;
-        }
+        // free(dados);
         proxRNN++;
     }
+    Atualizar_Cabecalho(bin, 1, 1, proxRNN); // Aqui ajustar ainda !!!!!!---
+
     fclose(bin); //  Fecha o arquivo binário
     fclose(csv); //  Fecha o arquivo csv
 
@@ -374,8 +400,8 @@ int main(int argc, char const *argv[])
 
     // printf("os argumentos são \t%s\t%s\t%s\n", argumento_1, argumento_2, argumento_3);  //   Ver o que está sendo lido no momento
 
-    const char csvArchiveName[] = "tecnologia_teste.csv"; // inserção manual do nome dos arquivos para debug
-    const char binArchiveName[] = "output_file.bin";      // inserção manual do nome dos arquivos para debug
+    const char csvArchiveName[] = "tecnologia.csv";  // inserção manual do nome dos arquivos para debug
+    const char binArchiveName[] = "output_file.bin"; // inserção manual do nome dos arquivos para debug
 
     // const char *csvArchiveName = argumento_2;
     // const char *binArchiveName = argumento_3;
