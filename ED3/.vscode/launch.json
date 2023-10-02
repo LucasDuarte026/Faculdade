@@ -10,9 +10,9 @@
 
 
                 // insira aqui os parametros de entrada
-                "1",
-                "tecnologia.csv",
-                "output_file.bin"
+                "3",
+                "output_file.bin",
+                "5"
             ],
 
 
