@@ -28,3 +28,30 @@ Quinta feira 28/09 - Baile:
 
 - Fiz a funcionalidade 3 também,entretanto preciso ajustar a 1 e também fiz a
 funcionalidade 2 e 3.
+
+-------------------
+
+Segunda-feira 01/10 - Baile:
+
+    funcionalidade_2:
+    -A função começa abrindo o arquivo binário para leitura.
+    -Lê o cabeçalho do arquivo binário.
+    -Se o status do cabeçalho for '0', indica que o arquivo binário não está consistente e a função retorna uma mensagem de erro.
+    -Se o arquivo estiver consistente, a função lê cada registro do arquivo.
+    -Para cada registro lido, verifica se o campo removido é igual a '-'. Se for, significa que o registro não foi removido logicamente e, portanto, deve ser exibido.
+    -Lê e exibe os campos do registro: grupo, popularidade, peso, nomeTecnologiaOrigem e nomeTecnologiaDestino.
+    -Se o registro estiver removido logicamente (campo removido diferente de '-'), a função pula para o próximo registro sem exibi-lo.
+    -A função continua lendo e exibindo registros até o final do arquivo.
+    -Fecha o arquivo binário.
+
+    funcionalidade_3:
+    -A função começa abrindo o arquivo binário para leitura.
+    -Lê o cabeçalho do arquivo binário.
+    -Se o status do cabeçalho for '0', indica que o arquivo binário não está consistente e a função retorna uma mensagem de erro.
+    -A função executa a busca n vezes, onde n é um argumento fornecido pelo usuário.
+    -Para cada busca:
+    -Lê o nome do campo e o valor do campo que serão usados como critério de busca.
+    -Percorre o arquivo binário em busca de registros que satisfaçam o critério.
+    -Se encontrar um registro que satisfaça o critério e não esteja removido logicamente, exibe os campos do registro.
+    -Se não encontrar nenhum registro que satisfaça o critério, exibe a mensagem "Registro inexistente".
+    -Fecha o arquivo binário.

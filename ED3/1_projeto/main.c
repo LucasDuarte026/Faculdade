@@ -180,7 +180,18 @@ void Escrever_Dados(FILE *bin, Dados dados)
     
     fwrite(&dados.nomeTecnologiaDestino.tamanho, sizeof(int), 1, bin);
     fwrite(dados.nomeTecnologiaDestino.string, sizeof(char), dados.nomeTecnologiaDestino.tamanho, bin);
+
+    int tamanhoAtual = sizeof(char) + 3*sizeof(int) + 2*sizeof(int) + dados.nomeTecnologiaOrigem.tamanho + dados.nomeTecnologiaDestino.tamanho;
+    
+    // Calcule a quantidade de lixo
+    int quantidadeLixo = TAM_REGISTRO - tamanhoAtual;
+    
+    // Escreva o lixo no arquivo binário
+    for (int i = 0; i < quantidadeLixo; i++) {
+        fwrite(LIXO, sizeof(char), 1, bin);
+    }
 }
+
 
 Dados LerRegistroCSV(FILE *csv)
 {
