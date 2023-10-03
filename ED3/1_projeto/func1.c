@@ -222,7 +222,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
     {
         Dados dados;
         dados = LerRegistroCSV(csv); //  Lê o arquivo linha a linha e armazana em dados
-        // Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário
+        Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário
         tecnologies = testa_unico(&quant_tec, dados, tecnologies);
         pares = testa_par(&duplicade_quant_tec, dados, pares);
 
