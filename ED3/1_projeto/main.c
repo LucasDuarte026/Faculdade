@@ -38,6 +38,9 @@ int main(int argc, char const *argv[])
 
     // printf("os argumentos são \t%s\t%s\t%s\n", argumento_1, argumento_2, argumento_3);  //   Ver o que está sendo lido no momento
 
+    // const char csvArchiveName[] = "dados1.csv";  // inserção manual do nome dos arquivos para debug
+    // const char binArchiveName[] = "output_file.bin"; // inserção manual do nome dos arquivos para debug
+
     const char *csvArchiveName;
     const char *binArchiveName;
 
