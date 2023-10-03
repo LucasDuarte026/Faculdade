@@ -1,26 +1,18 @@
 /*
-Dados dos integrantes:
+ *   Dados dos integrantes:
+ *
+ *   -> Lucas Sales Duarte - 11734490
+ *   -> João Victor de Almeida - 13695424
+ *   Alunos do curso de graduação de engenharia de computação
+ */
 
-    -> Lucas Sales Duarte - 11734490
-    -> João Victor de Almeida - 13695424
-Alunos do curso de graduação de engenharia de computação
-*/
-    //  inserir bibliotecas com as funções locais
+//  inserir bibliotecas com as funções locais
 #include "structs.h"
 #include "func1.h"
 #include "func2.h"
 #include "func3.h"
 #include "func4.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
-
-#define LIXO "$"
-#define TAM_REGISTRO_FIXO 21
-#define TAM_REGISTRO 76
-#define MAX_STRING_LENGTH 100
 
 int main(int argc, char const *argv[])
 {
@@ -46,9 +38,6 @@ int main(int argc, char const *argv[])
 
     // printf("os argumentos são \t%s\t%s\t%s\n", argumento_1, argumento_2, argumento_3);  //   Ver o que está sendo lido no momento
 
-    // const char csvArchiveName[] = "tecnologia.csv";  // inserção manual do nome dos arquivos para debug
-    // const char binArchiveName[] = "output_file.bin"; // inserção manual do nome dos arquivos para debug
-
     const char *csvArchiveName;
     const char *binArchiveName;
 
@@ -56,8 +45,10 @@ int main(int argc, char const *argv[])
     switch (decision)
     {
     case '1':
-        csvArchiveName = argumento_2;
-        binArchiveName = argumento_3;
+        // csvArchiveName = argumento_2;
+        // binArchiveName = argumento_3;
+        csvArchiveName = "tecnologia.csv";  // inserção manual do nome dos arquivos para debug
+        binArchiveName = "output_file.bin"; // inserção manual do nome dos arquivos para debug
         if (Functionality_1(csvArchiveName, binArchiveName))
         {
             printf("\nFalha no processamento do arquivo.");
@@ -69,7 +60,7 @@ int main(int argc, char const *argv[])
         break;
 
     case '3':
-        n = argumento_3[0]-48;
+        n = argumento_3[0] - 48;
         binArchiveName = argumento_2;
 
         functionality_3(binArchiveName, n);

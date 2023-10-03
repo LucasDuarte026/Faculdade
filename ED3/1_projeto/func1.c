@@ -64,20 +64,18 @@ static FILE *init_bin(FILE *bin)
     cabecalho.status = '0';
     cabecalho.proxRRN = 0;
     cabecalho.nroParesTecnologia = 0;
-    cabecalho.nroTecnologia = 0;
+    cabecalho.nroTecnologia =0;
 
-    fwrite(&cabecalho, sizeof(char), 1, bin);
+    fseek(bin, 0, SEEK_SET); // volta para o inicio
+    fwrite(&cabecalho, sizeof(Cabecalho), 1, bin);
 
     return bin;
 }
 
-static void Atualizar_Cabecalho(FILE *bin, int nroTecnologia, int nroParesTecnologia, int prox)
+static void Atualizar_Cabecalho(FILE *bin, char status,int nroTecnologia, int nroParesTecnologia, int prox)
 {
     Cabecalho cabecalho;
-    fseek(bin, 0, SEEK_SET); // volta para o inicio
-    fread(&cabecalho, sizeof(Cabecalho), 1, bin);
-
-    cabecalho.status = '1';
+    cabecalho.status = status;
     cabecalho.proxRRN = prox;
     cabecalho.nroTecnologia = nroTecnologia;
     cabecalho.nroParesTecnologia = nroParesTecnologia;
@@ -114,7 +112,7 @@ static void Escrever_Dados(FILE *bin, Dados dados)
 static Dados LerRegistroCSV(FILE *csv)
 { // le o registro
     Dados dados;
-    dados.removido = '-';
+    dados.removido = NAO_REMOVIDO;
     dados.nomeTecnologiaOrigem.string = NULL;
     dados.nomeTecnologiaOrigem.tamanho = 0;
     dados.nomeTecnologiaDestino.string = NULL;
@@ -209,7 +207,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
 
     bin = init_bin(bin); // inicializar o bin
 
-    int proxRNN = 0; //  armazena onde está o prox RNN
+    int proxRNN = 1; //  armazena onde está o prox RNN
 
     int quant_tec = 0;           //  Contado para quantidade de tecnologias
     int duplicade_quant_tec = 0; //  Contado para quantidade de tecnologias duplicadas
@@ -222,7 +220,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
     {
         Dados dados;
         dados = LerRegistroCSV(csv); //  Lê o arquivo linha a linha e armazana em dados
-        // Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário
+        Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário
         tecnologies = testa_unico(&quant_tec, dados, tecnologies);
         pares = testa_par(&duplicade_quant_tec, dados, pares);
 
@@ -239,7 +237,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
         proxRNN++;
     }
     printf("\nNumeros de tecnologia:\n\t-> Simples:\t|%d|\n\t-> Duplicado:\t|%d|\n", quant_tec, duplicade_quant_tec); // mostrar os dados
-    Atualizar_Cabecalho(bin, 1, 1, proxRNN);                                                                          // Aqui ajustar ainda !!!!!!---
+    Atualizar_Cabecalho(bin, '1',quant_tec, duplicade_quant_tec, proxRNN);                                                                          // Aqui ajustar ainda !!!!!!---
 
     fclose(bin); //  Fecha o arquivo binário
     fclose(csv); //  Fecha o arquivo csv
