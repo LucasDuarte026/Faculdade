@@ -10,9 +10,27 @@
 
 
                 // insira aqui os parametros de entrada
-                "1",
-                "tecnologia.csv",
-                "output_file.bin"
+
+                // func 1
+
+                // "1",
+                // "tecnologia.csv",
+                // "output_file.bin"
+
+
+                // func 2
+
+                // "2",
+                // "output_file.bin"
+
+                // func 3
+
+                "3",
+                "output_file.bin",
+                "5",
+                "<",
+                "input.txt",
+
             ],
 
 

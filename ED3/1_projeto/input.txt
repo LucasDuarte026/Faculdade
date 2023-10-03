@@ -1,0 +1,2 @@
+nomeTecnologiaOrigem "AZURE"
+nomeTecnologiaOrigem "ENTITY-FRAMEWORK"
