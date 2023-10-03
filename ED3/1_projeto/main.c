@@ -212,22 +212,26 @@ Dados LerRegistroCSV(FILE *csv)
     return dados;
 }
 
-char **testa_unico(int *prt_quant_tec, Dados dado, char **tecnologies)
-{
-    int quant_tec = *prt_quant_tec;     // Pega o valor do ponteiro
-    for (int i = 0; i < quant_tec; i++)
-    {
+char **testa_unico(int *prt_quant_tec, Dados dado, char **tecnologies) {
+    int _quant = *prt_quant_tec;
+    int flag = 0;
 
-        if (strcmp(tecnologies[i], dado.nomeTecnologiaOrigem.string) == 0) // testa se já existe
-        {
-            return tecnologies; //  Retorna o vetor da mesma forma
+    // Verifica se dado.nomeTecnologiaOrigem.string já existe em tecnologies
+    for (int i = 0; i < *prt_quant_tec; i++) {
+        if (strcmp(dado.nomeTecnologiaOrigem.string, tecnologies[i]) == 0 || strcmp(dado.nomeTecnologiaDestino.string, tecnologies[i]) == 0 ) {
+            flag = 1; // Tecnologia já existe
+            break;
         }
     }
 
-    quant_tec++;        //  Soma um na quantidade
-    tecnologies = realloc(tecnologies, quant_tec * sizeof(char *)); //  Incrementa quant_tec e realoca tecnologias com um tamanho maior
-    tecnologies[quant_tec - 1] = dado.nomeTecnologiaOrigem.string;  //  Armazena de fato a tecnologia no no local
-    *prt_quant_tec = quant_tec;     // Passa pro ponteiro
+    if (!flag) {
+        _quant++;
+        tecnologies = realloc(tecnologies, _quant * sizeof(char *));
+        tecnologies[_quant - 1] = strdup(dado.nomeTecnologiaOrigem.string);
+
+        *prt_quant_tec = _quant;
+    }
+
     return tecnologies;
 }
 
@@ -238,21 +242,21 @@ char **testa_par(int *prt_quant_tec_par, Dados dado, char **pares)
     strcpy(aux, dado.nomeTecnologiaOrigem.string);  // Copia origem na aux
     strcat(aux, dado.nomeTecnologiaDestino.string); // Concatena o destino
 
-    int quant_tec_par = *prt_quant_tec_par;         //  Pega o ponteiro
+    int quant_tec_par = *prt_quant_tec_par; //  Pega o ponteiro
     for (int i = 0; i < quant_tec_par; i++)
     {
-        if (strcmp(pares[i], aux) == 0)             // Testa se existe
+        if (strcmp(pares[i], aux) == 0) // Testa se existe
         {
-            return pares;                           // Sai se existir
+            return pares; // Sai se existir
         }
     }
 
-    quant_tec_par;      // soma um na quantidade
+    quant_tec_par++;                                        // soma um na quantidade
     pares = realloc(pares, quant_tec_par * sizeof(char *)); // realoca dinamicamente
-    pares[quant_tec_par - 1] = malloc(strlen(aux) + 1); // Aloca memória para a nova string
-    strcpy(pares[quant_tec_par - 1], aux);              // Copia o conteúdo de aux para a nova memória alocada
+    pares[quant_tec_par - 1] = malloc(strlen(aux) + 1);     // Aloca memória para a nova string
+    strcpy(pares[quant_tec_par - 1], aux);                  // Copia o conteúdo de aux para a nova memória alocada
 
-    *prt_quant_tec_par = quant_tec_par;                 // Passa pro ponteiro 
+    *prt_quant_tec_par = quant_tec_par; // Passa pro ponteiro
     return pares;
 }
 
@@ -284,7 +288,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
     {
         Dados dados;
         dados = LerRegistroCSV(csv); //  Lê o arquivo linha a linha e armazana em dados
-        Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário  
+        Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário
         tecnologies = testa_unico(&quant_tec, dados, tecnologies);
         pares = testa_par(&duplicade_quant_tec, dados, pares);
 
@@ -300,8 +304,8 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
         // free(dados);
         proxRNN++;
     }
-    printf("\nNumeros de tecnologia:\n\t-> Simples:\t|%d|\n\t-> Duplicado:\t|%d|\n",quant_tec,duplicade_quant_tec);                                       // mostrar os dados
-    Atualizar_Cabecalho(bin, 1, 1, proxRNN); // Aqui ajustar ainda !!!!!!---
+    printf("\nNumeros de tecnologia:\n\t-> Simples:\t|%d|\n\t-> Duplicado:\t|%d|\n", quant_tec, duplicade_quant_tec); // mostrar os dados
+    Atualizar_Cabecalho(bin, 1, 1, proxRNN);                                                                          // Aqui ajustar ainda !!!!!!---
 
     fclose(bin); //  Fecha o arquivo binário
     fclose(csv); //  Fecha o arquivo csv
