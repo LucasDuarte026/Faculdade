@@ -13,10 +13,6 @@
 #include "func3.h"
 #include "func4.h"
 
-#define LIXO "$"
-#define TAM_REGISTRO_FIXO 21
-#define TAM_REGISTRO 76
-#define MAX_STRING_LENGTH 100
 
 int main(int argc, char const *argv[])
 {

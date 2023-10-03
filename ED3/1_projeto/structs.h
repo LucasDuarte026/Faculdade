@@ -10,6 +10,8 @@
 #define TAM_REGISTRO_FIXO 21
 #define TAM_REGISTRO 76
 #define MAX_STRING_LENGTH 100
+#define REMOVIDO '1'
+#define NAO_REMOVIDO '0'
 
 typedef struct
 { // 13 bytes em status e 4 bytes no resto
