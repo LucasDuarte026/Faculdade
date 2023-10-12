@@ -17,8 +17,6 @@
 int main(int argc, char const *argv[])
 {
 
-    printf("\n-------- -------- -------- -------- -------- \n\n"); // apagar ao fim
-
     //  -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - --
     //  leitura de entrada de decisão:
 
@@ -48,10 +46,10 @@ int main(int argc, char const *argv[])
     switch (decision)
     {
     case '1':
-        // csvArchiveName = argumento_2;
-        // binArchiveName = argumento_3;
-        csvArchiveName = "tecnologia.csv";  // inserção manual do nome dos arquivos para debug
-        binArchiveName = "output_file.bin"; // inserção manual do nome dos arquivos para debug
+        csvArchiveName = argumento_2;
+        binArchiveName = argumento_3;
+        // csvArchiveName = "dados1.csv";  // inserção manual do nome dos arquivos para debug
+        // binArchiveName = "dados1.bin"; // inserção manual do nome dos arquivos para debug
         if (Functionality_1(csvArchiveName, binArchiveName))
         {
             printf("\nFalha no processamento do arquivo.");
@@ -76,12 +74,7 @@ int main(int argc, char const *argv[])
     }
 
     //  -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - --
-    // primeira etapa é criar o arquivo binário:
 
-    // fopen
 
-    //  -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - --
-    printf("\n\t\tSucesso\n");                                     // apagar ao fim
-    printf("\n\n-------- -------- -------- -------- -------- \n"); // apagar ao fim
     return 0;
 }
