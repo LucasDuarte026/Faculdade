@@ -1,10 +1,54 @@
 #include "structs.h"
 #include "func1.h"
 
+//  Em static estão as funções não chamadas fora de functionality_1
+void scan_quote_string(char *str)
+{
 
+    /*
+     *	Use essa função para ler um campo string delimitado entre aspas (").
+     *	Chame ela na hora que for ler tal campo. Por exemplo:
+     *
+     *	A entrada está da seguinte forma:
+     *		nomeDoCampo "MARIA DA SILVA"
+     *
+     *	Para ler isso para as strings já alocadas str1 e str2 do seu programa, você faz:
+     *		scanf("%s", str1); // Vai salvar nomeDoCampo em str1
+     *		scan_quote_string(str2); // Vai salvar MARIA DA SILVA em str2 (sem as aspas)
+     *
+     */
 
+    char R;
 
-    //  Em static estão as funções não chamadas fora de functionality_1
+    while ((R = getchar()) != EOF && isspace(R))
+        ; // ignorar espaços, \r, \n...
+
+    if (R == 'N' || R == 'n')
+    { // campo NULO
+        getchar();
+        getchar();
+        getchar();       // ignorar o "ULO" de NULO.
+        strcpy(str, ""); // copia string vazia
+    }
+    else if (R == '\"')
+    {
+        if (scanf("%[^\"]", str) != 1)
+        { // ler até o fechamento das aspas
+            strcpy(str, "");
+        }
+        getchar(); // ignorar aspas fechando
+    }
+    else if (R != EOF)
+    { // vc tá tentando ler uma string que não tá entre aspas! Fazer leitura normal %s então, pois deve ser algum inteiro ou algo assim...
+        str[0] = R;
+        scanf("%s", &str[1]);
+    }
+    else
+    { // EOF
+        strcpy(str, "");
+    }
+}
+
 static void readline(char *string)
 {
     char c = 0;
@@ -63,16 +107,18 @@ static FILE *init_bin(FILE *bin)
     Cabecalho cabecalho;
     cabecalho.status = '0';
     cabecalho.proxRRN = 0;
+    cabecalho.nroTecnologia = 0;
     cabecalho.nroParesTecnologia = 0;
-    cabecalho.nroTecnologia =0;
 
     fseek(bin, 0, SEEK_SET); // volta para o inicio
-    fwrite(&cabecalho, sizeof(Cabecalho), 1, bin);
-
+    fwrite(&cabecalho.status, sizeof(char), 1, bin);
+    fwrite(&cabecalho.proxRRN, sizeof(int), 1, bin);
+    fwrite(&cabecalho.nroTecnologia, sizeof(int), 1, bin);
+    fwrite(&cabecalho.nroParesTecnologia, sizeof(int), 1, bin);
     return bin;
 }
 
-static void Atualizar_Cabecalho(FILE *bin, char status,int nroTecnologia, int nroParesTecnologia, int prox)
+static void Atualizar_Cabecalho(FILE *bin, char status, int nroTecnologia, int nroParesTecnologia, int prox)
 {
     Cabecalho cabecalho;
     cabecalho.status = status;
@@ -81,7 +127,10 @@ static void Atualizar_Cabecalho(FILE *bin, char status,int nroTecnologia, int nr
     cabecalho.nroParesTecnologia = nroParesTecnologia;
 
     fseek(bin, 0, SEEK_SET); // volta para o inicio
-    fwrite(&cabecalho, sizeof(Cabecalho), 1, bin);
+    fwrite(&cabecalho.status, sizeof(char), 1, bin);
+    fwrite(&cabecalho.proxRRN, sizeof(int), 1, bin);
+    fwrite(&cabecalho.nroTecnologia, sizeof(int), 1, bin);
+    fwrite(&cabecalho.nroParesTecnologia, sizeof(int), 1, bin);
 }
 
 static void Escrever_Dados(FILE *bin, Dados dados)
@@ -109,7 +158,9 @@ static void Escrever_Dados(FILE *bin, Dados dados)
     }
 }
 
-static Dados LerRegistroCSV(FILE *csv)
+short int flag_origin = 1;
+short int flag_destino = 1;
+static Dados LerRegistroCSV_old(FILE *csv)
 { // le o registro
     Dados dados;
     dados.removido = NAO_REMOVIDO;
@@ -134,8 +185,129 @@ static Dados LerRegistroCSV(FILE *csv)
 
         dados.nomeTecnologiaDestino.tamanho = strlen(bufferDestino);
         dados.nomeTecnologiaDestino.string = strdup(bufferDestino);
-        // printf("%s,%d,%d,%s,%d\n", dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso); // para ler os dados escritos
+        printf("%s,%d,%d,%s,%d\n", dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso); // para ler os dados escritos
     }
+
+    return dados;
+}
+
+static char *GetNextToken(char **str, const char *delimitador)
+{
+    char *token = *str;
+    if (token == NULL)
+        return NULL;
+
+    *str = strpbrk(*str, delimitador); // anda em str (na linha) até encontrar o delimitador
+    if (*str != NULL)
+    {
+        *(*str) = '\0'; // colocar um \0 para sabermos onde é o fim da string, do elemento no caso
+        (*str)++;
+    }
+    return token;
+}
+
+static void ProcessarElemento(Dados *dados, const char *elemento, int elementoAtual)
+{
+    const char value_hex[] = "\x0D\x0A"; // \r\n em hexadecimal
+    switch (elementoAtual)
+    {
+    case 1:
+        if (strlen(elemento) == 0)
+        {
+            dados->nomeTecnologiaOrigem.tamanho = 0;
+            dados->nomeTecnologiaOrigem.string = NULO;
+            !flag_origin;
+        }
+        else
+        {
+
+            dados->nomeTecnologiaOrigem.tamanho = strlen(elemento);
+            dados->nomeTecnologiaOrigem.string = strdup(elemento);
+        }
+        break;
+    case 2:
+        if (strcmp(elemento, "") == 0)
+        {
+            dados->grupo = -1; // e será printado NULO
+        }
+        else
+        {
+            dados->grupo = atoi(elemento);
+        }
+        break;
+    case 3:
+        if (strcmp(elemento, "") == 0)
+        {
+            dados->popularidade = -1; // e será printado NULO
+        }
+        else
+        {
+            dados->popularidade = atoi(elemento);
+        }
+        break;
+    case 4:
+        if (strlen(elemento) == 0)
+        {
+            dados->nomeTecnologiaDestino.tamanho = 0;
+            dados->nomeTecnologiaDestino.string = NULO;
+            !flag_destino;
+        }
+        else
+        {
+
+            dados->nomeTecnologiaDestino.tamanho = strlen(elemento);
+            dados->nomeTecnologiaDestino.string = strdup(elemento);
+        }
+        break;
+    case 5:
+        if (strcmp(elemento, "") == 0 || strcmp(elemento, value_hex) == 0) // vê se é o fim da linha o 5 elemento, esté é nulo!. este teste eé feito pois no csv tem ,, no final e o 5º elemento nem aparece
+        {
+            dados->peso = -1; // e será printado NULO
+        }
+        else
+        {
+            dados->peso = atoi(elemento);
+        }
+        break;
+    }
+}
+
+static Dados LerRegistroCSV(FILE *csv)
+{
+    char linha[200]; // Tamanho máximo da linha
+                     //  Inicializa tudo
+    Dados dados;
+    dados.removido = NAO_REMOVIDO;
+    dados.nomeTecnologiaOrigem.string = NULL;
+    dados.nomeTecnologiaOrigem.tamanho = 0;
+    dados.nomeTecnologiaDestino.string = NULL;
+    dados.nomeTecnologiaDestino.tamanho = 0;
+    dados.popularidade = 0;
+    dados.peso = 0;
+    dados.grupo = 0;
+
+    if (fgets(linha, sizeof(linha), csv) != NULL)
+    {
+        // printf("Antes linha: %s\n", linha);
+
+        char *str = linha;
+        int elementoAtual = 1;
+
+        while (1)
+        {
+            char *elemento = GetNextToken(&str, ","); // usa-se essa função pois não da pra simplesmente usar strtok, pois ele não lida com delimitadores consecutivos
+            if (elemento == NULL)
+            {
+                break; // sai quando chega no fim da linha
+            }
+
+            ProcessarElemento(&dados, elemento, elementoAtual); // Processa o elemento
+            // printf("iterativa: linha: %s\te o elemento: %s\n", linha, elemento); // visualizar em tempo real o que está acontecendo
+
+            elementoAtual++;
+        }
+    }
+    printf("%s,%d,%d,%s,%d\n", dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso);
 
     return dados;
 }
@@ -148,7 +320,11 @@ static char **testa_unico(int *prt_quant_tec, Dados dado, char **tecnologies)
     // Verifica se dado.nomeTecnologiaOrigem.string já existe em tecnologies
     for (int i = 0; i < *prt_quant_tec; i++)
     {
-        if (strcmp(dado.nomeTecnologiaOrigem.string, tecnologies[i]) == 0)
+        if (tecnologies[i] == NULL)
+        {
+            printf("\nentrou\t|%i|\t|%s|", i, tecnologies[i]);
+        }
+        else if (strcmp(dado.nomeTecnologiaOrigem.string, tecnologies[i]) == 0)
         {
             flag = 1; // Tecnologia já existe
             break;
@@ -171,10 +347,13 @@ static char **testa_par(int *prt_quant_tec_par, Dados dado, char **pares)
 {
     int stringConcatMaxSize = strlen(dado.nomeTecnologiaDestino.string) + strlen(dado.nomeTecnologiaOrigem.string) + 1;
     char aux[stringConcatMaxSize];
+    if (dado.nomeTecnologiaOrigem.string == NULO || dado.nomeTecnologiaDestino.string == NULO) // Testa se algum é nulo, pois não conta
+    {
+        return pares;
+    }
     strcpy(aux, dado.nomeTecnologiaOrigem.string);  // Copia origem na aux
     strcat(aux, dado.nomeTecnologiaDestino.string); // Concatena o destino
-
-    int quant_tec_par = *prt_quant_tec_par; //  Pega o ponteiro
+    int quant_tec_par = *prt_quant_tec_par;         //  Pega o ponteiro
     for (int i = 0; i < quant_tec_par; i++)
     {
         if (strcmp(pares[i], aux) == 0) // Testa se existe
@@ -207,7 +386,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
 
     bin = init_bin(bin); // inicializar o bin
 
-    int proxRNN = 1; //  armazena onde está o prox RNN
+    int proxRNN = 0; //  armazena onde está o prox RNN
 
     int quant_tec = 0;           //  Contado para quantidade de tecnologias
     int duplicade_quant_tec = 0; //  Contado para quantidade de tecnologias duplicadas
@@ -216,8 +395,10 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
 
     char headerLine[MAX_STRING_LENGTH];         //  Cria o ponteiro que armazenará a primeira linha completa
     fgets(headerLine, sizeof(headerLine), csv); //  Pular a primeira linha
+    // fseek(bin, sizeof(Cabecalho), SEEK_SET);
     while (!feof(csv))
     {
+
         Dados dados;
         dados = LerRegistroCSV(csv); //  Lê o arquivo linha a linha e armazana em dados
         Escrever_Dados(bin, dados);  //  Escreve o dado no arquivo binário
@@ -231,64 +412,24 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
         //     printf("tec:\t%s", tecnologies[i]);
         // }
 
-        free(dados.nomeTecnologiaOrigem.string);  // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
-        free(dados.nomeTecnologiaDestino.string); // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
-        // free(dados);
+        if (!flag_origin) // Uso da flag para só dar free nos elementos variavéis caso eles não sejam nulos (não foram criados)
+        {
+            free(dados.nomeTecnologiaOrigem.string); // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
+            !flag_origin;
+        }
+        if (!flag_destino) // Uso da flag para só dar free nos elementos variavéis caso eles não sejam nulos (não foram criados)
+        {
+            free(dados.nomeTecnologiaDestino.string); // apaga os elementos variaveis para serem alocados novamente com seu tamanho variável
+            !flag_destino;
+        }
         proxRNN++;
     }
     printf("\nNumeros de tecnologia:\n\t-> Simples:\t|%d|\n\t-> Duplicado:\t|%d|\n", quant_tec, duplicade_quant_tec); // mostrar os dados
-    Atualizar_Cabecalho(bin, '1',quant_tec, duplicade_quant_tec, proxRNN);                                                                          // Aqui ajustar ainda !!!!!!---
+    Atualizar_Cabecalho(bin, '1', quant_tec, duplicade_quant_tec, proxRNN);                                           // Aqui ajustar ainda !!!!!!---
 
     fclose(bin); //  Fecha o arquivo binário
     fclose(csv); //  Fecha o arquivo csv
 
     binarioNaTela(binArchiveName);
     return 0;
-}
-
-void scan_quote_string(char *str)
-{
-
-    /*
-     *	Use essa função para ler um campo string delimitado entre aspas (").
-     *	Chame ela na hora que for ler tal campo. Por exemplo:
-     *
-     *	A entrada está da seguinte forma:
-     *		nomeDoCampo "MARIA DA SILVA"
-     *
-     *	Para ler isso para as strings já alocadas str1 e str2 do seu programa, você faz:
-     *		scanf("%s", str1); // Vai salvar nomeDoCampo em str1
-     *		scan_quote_string(str2); // Vai salvar MARIA DA SILVA em str2 (sem as aspas)
-     *
-     */
-
-    char R;
-
-    while ((R = getchar()) != EOF && isspace(R))
-        ; // ignorar espaços, \r, \n...
-
-    if (R == 'N' || R == 'n')
-    { // campo NULO
-        getchar();
-        getchar();
-        getchar();       // ignorar o "ULO" de NULO.
-        strcpy(str, ""); // copia string vazia
-    }
-    else if (R == '\"')
-    {
-        if (scanf("%[^\"]", str) != 1)
-        { // ler até o fechamento das aspas
-            strcpy(str, "");
-        }
-        getchar(); // ignorar aspas fechando
-    }
-    else if (R != EOF)
-    { // vc tá tentando ler uma string que não tá entre aspas! Fazer leitura normal %s então, pois deve ser algum inteiro ou algo assim...
-        str[0] = R;
-        scanf("%s", &str[1]);
-    }
-    else
-    { // EOF
-        strcpy(str, "");
-    }
 }
