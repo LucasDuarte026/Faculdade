@@ -1,10 +1,7 @@
 #include "structs.h"
 #include "func1.h"
 
-
-
-
-    //  Em static estão as funções não chamadas fora de functionality_1
+//  Em static estão as funções não chamadas fora de functionality_1
 static void readline(char *string)
 {
     char c = 0;
@@ -64,15 +61,17 @@ static FILE *init_bin(FILE *bin)
     cabecalho.status = '0';
     cabecalho.proxRRN = 0;
     cabecalho.nroParesTecnologia = 0;
-    cabecalho.nroTecnologia =0;
+    cabecalho.nroTecnologia = 0;
 
     fseek(bin, 0, SEEK_SET); // volta para o inicio
-    fwrite(&cabecalho, sizeof(Cabecalho), 1, bin);
-
+    fwrite(&cabecalho.status, sizeof(char), 1, bin);
+    fwrite(&cabecalho.proxRRN, sizeof(int), 1, bin);
+    fwrite(&cabecalho.nroParesTecnologia, sizeof(int), 1, bin);
+    fwrite(&cabecalho.nroTecnologia, sizeof(int), 1, bin);
     return bin;
 }
 
-static void Atualizar_Cabecalho(FILE *bin, char status,int nroTecnologia, int nroParesTecnologia, int prox)
+static void Atualizar_Cabecalho(FILE *bin, char status, int nroTecnologia, int nroParesTecnologia, int prox)
 {
     Cabecalho cabecalho;
     cabecalho.status = status;
@@ -81,7 +80,10 @@ static void Atualizar_Cabecalho(FILE *bin, char status,int nroTecnologia, int nr
     cabecalho.nroParesTecnologia = nroParesTecnologia;
 
     fseek(bin, 0, SEEK_SET); // volta para o inicio
-    fwrite(&cabecalho, sizeof(Cabecalho), 1, bin);
+    fwrite(&cabecalho.status, sizeof(char), 1, bin);
+    fwrite(&cabecalho.proxRRN, sizeof(int), 1, bin);
+    fwrite(&cabecalho.nroParesTecnologia, sizeof(int), 1, bin);
+    fwrite(&cabecalho.nroTecnologia, sizeof(int), 1, bin);
 }
 
 static void Escrever_Dados(FILE *bin, Dados dados)
@@ -207,7 +209,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
 
     bin = init_bin(bin); // inicializar o bin
 
-    int proxRNN = 1; //  armazena onde está o prox RNN
+    int proxRNN = 0; //  armazena onde está o prox RNN
 
     int quant_tec = 0;           //  Contado para quantidade de tecnologias
     int duplicade_quant_tec = 0; //  Contado para quantidade de tecnologias duplicadas
@@ -216,6 +218,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
 
     char headerLine[MAX_STRING_LENGTH];         //  Cria o ponteiro que armazenará a primeira linha completa
     fgets(headerLine, sizeof(headerLine), csv); //  Pular a primeira linha
+    // fseek(bin, sizeof(Cabecalho), SEEK_SET);
     while (!feof(csv))
     {
         Dados dados;
@@ -237,7 +240,7 @@ short int Functionality_1(const char csvArchiveName[], const char binArchiveName
         proxRNN++;
     }
     printf("\nNumeros de tecnologia:\n\t-> Simples:\t|%d|\n\t-> Duplicado:\t|%d|\n", quant_tec, duplicade_quant_tec); // mostrar os dados
-    Atualizar_Cabecalho(bin, '1',quant_tec, duplicade_quant_tec, proxRNN);                                                                          // Aqui ajustar ainda !!!!!!---
+    Atualizar_Cabecalho(bin, '1', quant_tec, duplicade_quant_tec, proxRNN);                                           // Aqui ajustar ainda !!!!!!---
 
     fclose(bin); //  Fecha o arquivo binário
     fclose(csv); //  Fecha o arquivo csv
