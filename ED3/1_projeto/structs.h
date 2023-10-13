@@ -12,6 +12,7 @@
 #define MAX_STRING_LENGTH 100
 #define REMOVIDO '1'
 #define NAO_REMOVIDO '0'
+#define NULO "NULO"
 
 typedef struct
 { // 13 bytes em status e 4 bytes no resto

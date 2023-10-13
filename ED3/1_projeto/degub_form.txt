@@ -1,8 +1,0 @@
-para debugar, tem que ter o arquivo no mesmo diretorio. 
-
-rodar o make debug -> para criar o arquivo de debug
-e apertar no botão de debug que roda o seguinte arquivo .launch
- assim roda o debug
-
-
-se quiser, dá para colocar os argumentos dentro do .launch
