@@ -1,8 +1,6 @@
 #include "structs.h"
 #include "func3.h"
-#include "func1.h"  //   Precisa do scan_quote_string()
-
-
+#include "func1.h" //   Precisa do scan_quote_string()
 
 void functionality_3old(const char binArchiveName[], int n)
 {
@@ -81,7 +79,59 @@ void functionality_3old(const char binArchiveName[], int n)
     fclose(bin);
 }
 
+static void printa_registro(Dados *dados)
+{
+    // nomeTecn:ologiaOrigem,grupo,popularidade,nomeTecnologiaDestino,peso
+    // Mostra o nome da origem
+    if (dados->nomeTecnologiaOrigem.tamanho == 0)
+    {
+        printf("NULO, ");
+    }
+    else
+    {
+        printf("%s, ", dados->nomeTecnologiaOrigem.string);
+    }
 
+    // Mostra o nome do grupo
+    if (dados->grupo == -1)
+    {
+        printf("NULO, ");
+    }
+    else
+    {
+        printf("%d, ", dados->grupo);
+    }
+    // Mostra o nome do grupo
+    if (dados->popularidade == -1)
+    {
+        printf("NULO, ");
+    }
+    else
+    {
+        printf("%d, ", dados->popularidade);
+    }
+
+    // Mostra o nome da destino
+    if (dados->nomeTecnologiaDestino.tamanho == 0)
+    {
+        printf("NULO, ");
+    }
+    else
+    {
+        printf("%s, ", dados->nomeTecnologiaDestino.string);
+    }
+
+    // Mostra o nome do grupo
+    if (dados->peso == -1)
+    {
+        printf("NULO");
+    }
+    else
+    {
+        printf("%d", dados->peso);
+    }
+    printf("\n");
+}
 
 void functionality_3(const char binArchiveName[], int n)
 {
@@ -97,7 +147,7 @@ void functionality_3(const char binArchiveName[], int n)
 
     if (cabecalho.status == '0')
     {
-        printf("\nArquivo binário não está consistente.\n");
+        printf("Falha no processamento do arquivo.\r\n");
         fclose(bin);
         return;
     }
@@ -112,7 +162,7 @@ void functionality_3(const char binArchiveName[], int n)
         int found = 0;
         Dados dados;
 
-        fseek(bin, sizeof(Cabecalho), SEEK_SET);
+        fseek(bin,13, SEEK_SET);
 
         while (fread(&dados.removido, sizeof(char), 1, bin))
         {
@@ -138,11 +188,10 @@ void functionality_3(const char binArchiveName[], int n)
                     (strcmp(nomeCampo, "popularidade") == 0 && atoi(valorCampo) == dados.popularidade) ||
                     (strcmp(nomeCampo, "peso") == 0 && atoi(valorCampo) == dados.peso))
                 {
-                    printf("%s,%d,%d,%s,%d\n", dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso);
+                    printa_registro(&dados);
+                    // printf("%s, %d, %d, %s, %d\n",  dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso);
                     found = 1;
                 }
-
-                
 
                 free(dados.nomeTecnologiaOrigem.string);
                 free(dados.nomeTecnologiaDestino.string);

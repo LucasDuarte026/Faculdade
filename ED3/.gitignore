@@ -3,6 +3,7 @@
 1_projeto/valgrind
 tecnologia_teste.csv
 1_projeto/CasosTeste
+1_projeto/casos_teste
 1_projeto/arquivos_v3
-1_projeto/dados1.bin
-1_projeto/dados2.bin
+1_projeto/input.txt
+1_projeto/*.bin
