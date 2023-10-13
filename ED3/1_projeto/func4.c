@@ -34,7 +34,11 @@ static void pula_RRN(FILE *bin, int RRN)
 
 void functionality_4(const char binArchiveName[], const int RRN)
 {
-    FILE *bin = fopen(binArchiveName, "rb");
+    /*
+    *   Inicialização bem semelhante as outras funcionalidades
+    *   Abre o arquivo binário, lê o cabeçario para posicionar devidamente a cabeça leitora para o primeiro RRN
+    */
+    FILE *bin = fopen(binArchiveName, "rb");   
     if (bin == NULL)
     {
         printf("\nFalha no processamento do arquivo.\n");
@@ -56,12 +60,12 @@ void functionality_4(const char binArchiveName[], const int RRN)
 
     Dados dados;
 
-    pula_RRN(bin, RRN);
+    pula_RRN(bin, RRN); //  Função base para pular até o RRN desejado
 
-    // le tudo do registro a seguir
+    // le tudo do registro desejado a seguir
     while (fread(&dados.removido, sizeof(char), 1, bin))
     {
-        if (dados.removido == '0')
+        if (dados.removido == '0')  //  Análogo a função já implmentada
         {
             fread(&dados.grupo, sizeof(int), 1, bin);
             fread(&dados.popularidade, sizeof(int), 1, bin);
@@ -79,16 +83,23 @@ void functionality_4(const char binArchiveName[], const int RRN)
             break;
         }
     }
-    if (!fread(&dados.removido, sizeof(char), 1, bin))
+
+    /*
+    *   Caso o programa ainda não tenha encontrado e continue procurando, eventualmente chegará ao fim do arquivo
+    *   Se isso acontecer irá encontrar apenas valores apontantes para NULL. caso isso aconteça, o seguinte teste termina o programa
+    */
+
+    if (!fread(&dados.removido, sizeof(char), 1, bin))  
     {
         printf("Registro inexistente.\n");
         fclose(bin);
         return;
     }
-    printa_registro(&dados);
-    free(dados.nomeTecnologiaOrigem.string);
+
+    printa_registro(&dados);    //  Utiliza a função já previamente criada na funcionalidade 3 para printar n tela o devido registro
+    free(dados.nomeTecnologiaOrigem.string);    //  Libera as strings variaveis
     free(dados.nomeTecnologiaDestino.string);
 
-    fclose(bin);
+    fclose(bin);    //  Fecha o arquivo
     return;
 }

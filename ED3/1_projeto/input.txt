@@ -1,2 +1,0 @@
-nomeTecnologiaOrigem "SWIFT"
-popularidade 13

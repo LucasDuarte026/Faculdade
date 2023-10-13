@@ -31,8 +31,8 @@ int main(int argc, char const *argv[])
     const char *argumento_1 = argv[1];
     const char *argumento_2 = argv[2];
     const char *argumento_3 = argv[3];
-    // const char *argumento_4 = argv[4];
-    // const char *argumento_5 = argv[5];
+    // const char *argumento_4 = argv[4];   //  Caso seja necessário
+    // const char *argumento_5 = argv[5];   //  Caso seja necessário
 
     // printf("os argumentos são \t%s\t%s\t%s\n", argumento_1, argumento_2, argumento_3);  //   Ver o que está sendo lido no momento
 
@@ -63,7 +63,7 @@ int main(int argc, char const *argv[])
 
     case '3':
         // printf("tamanho cabcalho:\t|%ld|\n",sizeof(Cabecalho)); // teste para averiguar o tamanho do cabecalho no inicio do arquivo
-        n = argumento_3[0] - 48;
+        n = argumento_3[0] - 48;    //  Similar a função atoi() só que mais baixo nível e manual
         binArchiveName = argumento_2;
 
         functionality_3(binArchiveName, n);

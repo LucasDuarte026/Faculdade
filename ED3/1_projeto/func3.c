@@ -2,7 +2,7 @@
 #include "func3.h"
 #include "func1.h" //   Precisa do scan_quote_string()
 
-void functionality_3old(const char binArchiveName[], int n)
+void functionality_3old(const char binArchiveName[], int n) //  Funcionalidade usada antigamente sem tratamento de nulos
 {
     FILE *bin = fopen(binArchiveName, "rb");
     if (bin == NULL)
@@ -84,7 +84,11 @@ void functionality_3old(const char binArchiveName[], int n)
 
 void printa_registro(Dados *dados)
 {
-    // nomeTecn:ologiaOrigem,grupo,popularidade,nomeTecnologiaDestino,peso
+    /*
+     *  Ordem necessária de print:
+     *  nomeTecnologiaOrigem,grupo,popularidade,nomeTecnologiaDestino,peso
+     */
+
     // Mostra o nome da origem
     if (dados->nomeTecnologiaOrigem.tamanho == 0)
     {
@@ -133,11 +137,15 @@ void printa_registro(Dados *dados)
     {
         printf("%d", dados->peso);
     }
-    printf("\n");
+    printf("\n");   //  Último pulo delinha
 }
 
 void functionality_3(const char binArchiveName[], int n)
 {
+    /*
+     *   Inicialização bem semelhante as outras funcionalidades
+     *   Abre o arquivo binário, lê o cabeçario para posicionar devidamente a cabeça leitora para o primeiro RRN
+     */
     FILE *bin = fopen(binArchiveName, "rb");
     if (bin == NULL)
     {
@@ -155,21 +163,22 @@ void functionality_3(const char binArchiveName[], int n)
         return;
     }
 
+    // Para cada n inserido, uma rodada de leitura é feita com auxílio do for
     for (int i = 0; i < n; i++)
     {
-        char nomeCampo[MAX_STRING_LENGTH];
-        char valorCampo[MAX_STRING_LENGTH];
-        scanf("%s", nomeCampo);
-        scan_quote_string(valorCampo);
+        char nomeCampo[MAX_STRING_LENGTH];  //  Buffer preparado para pegar a string necessária ao nome do campo de entrada
+        char valorCampo[MAX_STRING_LENGTH]; //  Buffer preparado para pegar o valor necessário do campo de entrada
+        scanf("%s", nomeCampo);             //  Recebe o nome do campo
+        scan_quote_string(valorCampo);      //  Recebe o valor do campo entre aspas
 
-        int found = 0;
-        Dados dados;
+        int found = 0; //  inicializa a variável de encontrar
+        Dados dados;   //  Inicializa os dados que serão inseridos caso ache
 
-        fseek(bin,13, SEEK_SET);
+        fseek(bin, 13, SEEK_SET); //  Pula o cabeçalho até o primeiro RRN
 
-        while (fread(&dados.removido, sizeof(char), 1, bin))
+        while (fread(&dados.removido, sizeof(char), 1, bin)) //  lê enquanto houver caracter não nulo
         {
-            if (dados.removido == '0')
+            if (dados.removido == '0') //  Caso esse caracter lido seja o removido, lê o registro todo a frente elemento por elemento
             {
                 fread(&dados.grupo, sizeof(int), 1, bin);
                 fread(&dados.popularidade, sizeof(int), 1, bin);
@@ -185,31 +194,33 @@ void functionality_3(const char binArchiveName[], int n)
                 fread(dados.nomeTecnologiaDestino.string, sizeof(char), dados.nomeTecnologiaDestino.tamanho, bin);
                 dados.nomeTecnologiaDestino.string[dados.nomeTecnologiaDestino.tamanho] = '\0';
 
+                /*
+                 *  IF gigante para teste de todas as possibilidades,
+                 *  cruzando o nomeCampo e o valorCampo com todas
+                 *  as entradas e saídas de uma vez só, economizando código
+                 */
+
                 if ((strcmp(nomeCampo, "nomeTecnologiaOrigem") == 0 && strcmp(valorCampo, dados.nomeTecnologiaOrigem.string) == 0) ||
                     (strcmp(nomeCampo, "nomeTecnologiaDestino") == 0 && strcmp(valorCampo, dados.nomeTecnologiaDestino.string) == 0) ||
                     (strcmp(nomeCampo, "grupo") == 0 && atoi(valorCampo) == dados.grupo) ||
                     (strcmp(nomeCampo, "popularidade") == 0 && atoi(valorCampo) == dados.popularidade) ||
                     (strcmp(nomeCampo, "peso") == 0 && atoi(valorCampo) == dados.peso))
                 {
-                    printa_registro(&dados);
-                    // printf("%s, %d, %d, %s, %d\n",  dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso);
-                    found = 1;
+                    printa_registro(&dados); // função que printa o registro inteiro, com ou sem nulos
+                    // printf("%s, %d, %d, %s, %d\n",  dados.nomeTecnologiaOrigem.string, dados.grupo, dados.popularidade, dados.nomeTecnologiaDestino.string, dados.peso); // Antiga forma de se printar os campos, sem tratamento de NULOS
+                    found = 1; //  Caso encontre
                 }
 
-                free(dados.nomeTecnologiaOrigem.string);
+                free(dados.nomeTecnologiaOrigem.string); //  Libera o campo variável como desejado pelo projeto
                 free(dados.nomeTecnologiaDestino.string);
-            }
-            else
-            {
-                // fseek(bin, TAM_REGISTRO, SEEK_CUR);
             }
         }
 
         if (!found)
         {
-            printf("Registro inexistente.\n");
+            printf("Registro inexistente.\n"); // CASO O PEDIDO NÃO ENCONTRE NADA
         }
     }
 
-    fclose(bin);
+    fclose(bin); //  Fecha o binário devidamente
 }
