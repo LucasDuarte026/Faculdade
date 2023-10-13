@@ -43,6 +43,7 @@ int main(int argc, char const *argv[])
     const char *binArchiveName;
 
     int n;
+    int RRN;
     switch (decision)
     {
     case '1':
@@ -68,7 +69,9 @@ int main(int argc, char const *argv[])
         functionality_3(binArchiveName, n);
         break;
     case '4':
-        /* code */
+        binArchiveName = argumento_2;
+        RRN = atoi(argumento_3);
+        functionality_4(binArchiveName, RRN);
         break;
     default:
         break;

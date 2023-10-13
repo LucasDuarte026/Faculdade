@@ -31,11 +31,17 @@
 
                 // func 3
 
-                "3",
-                "arquivos_v3/binario7.bin",
-                "1",
-                "<",
-                "input.txt",
+                // "3",
+                // "arquivos_v3/binario7.bin",
+                // "1",
+                // "<",
+                // "input.txt",
+
+                //  fun4
+
+                "4",
+                "dados2.bin",
+                "512"
 
             ],
 

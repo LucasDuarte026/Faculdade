@@ -104,14 +104,14 @@ static void binarioNaTela(const char *nomeArquivoBinario)
 
 static FILE *init_bin(FILE *bin)
 {
-    Cabecalho cabecalho;
+    Cabecalho cabecalho;    //  Inicializa um cabeçario e o escreve no começo do bin com os valores iniciais a baixo
     cabecalho.status = '0';
     cabecalho.proxRRN = 0;
     cabecalho.nroTecnologia = 0;
     cabecalho.nroParesTecnologia = 0;
 
-    fseek(bin, 0, SEEK_SET); // volta para o inicio
-    fwrite(&cabecalho.status, sizeof(char), 1, bin);
+    fseek(bin, 0, SEEK_SET); // volta para o inicio, garantindo apontar para o lugar certo
+    fwrite(&cabecalho.status, sizeof(char), 1, bin);    //  Armazena 1  a 1 os dados como exigido
     fwrite(&cabecalho.proxRRN, sizeof(int), 1, bin);
     fwrite(&cabecalho.nroTecnologia, sizeof(int), 1, bin);
     fwrite(&cabecalho.nroParesTecnologia, sizeof(int), 1, bin);
@@ -369,29 +369,26 @@ static char **testa_par(int *prt_quant_tec_par, Dados dado, char **pares)
 
 short int Functionality_1(const char csvArchiveName[], const char binArchiveName[])
 {
-    // printf("\n\n\tcsv:%s\t\tbinary:\t%s\n", csvArchiveName, binArchiveName); // nome dos arquivos usados
 
     FILE *csv = fopen(csvArchiveName, "r");   // buscar o csv
     FILE *bin = fopen(binArchiveName, "wb+"); // criar o bin
 
     if (csv == NULL || bin == NULL)
     {
-        printf("\nFalha no processamento do arquivo.\n");
+        printf("Falha no processamento do arquivo.\n");
         return 1; // Caso o csv não seja encontrado ou o bin não criado, passa 1 DE ERRO para o file
     }
 
-    bin = init_bin(bin); // inicializar o bin
+    bin = init_bin(bin);    //  Inicializar o bin
 
-    int proxRNN = 0; //  armazena onde está o prox RNN
+    int proxRNN = 0;    //  armazena onde está o prox RNN
 
-    int quant_tec = 0;           //  Contado para quantidade de tecnologias
-    int duplicade_quant_tec = 0; //  Contado para quantidade de tecnologias duplicadas
-    char **tecnologies = NULL;   //  Inicializa um vetor que armazena ponteiros strings
+    int quant_tec = 0;           //  Contador para quantidade de tecnologias
+    int duplicade_quant_tec = 0; //  Contador para quantidade de tecnologias duplicadas
+    char **tecnologies = NULL;   //  Inicializa um vetor que armazena ponteiros strings dos singulares
     char **pares = NULL;         //  Inicializa um vetor que armazena ponteiros strings dos pares
 
-    char headerLine[MAX_STRING_LENGTH];         //  Cria o ponteiro que armazenará a primeira linha completa
-    fgets(headerLine, sizeof(headerLine), csv); //  Pular a primeira linha
-    // fseek(bin, sizeof(Cabecalho), SEEK_SET);
+    fseek(bin, TAM_CABECALHO, SEEK_SET);    //  Pula para o fim do cabecalho
     while (!feof(csv))
     {
 

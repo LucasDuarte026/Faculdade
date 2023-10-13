@@ -12,7 +12,10 @@ void functionality_3old(const char binArchiveName[], int n)
     }
 
     Cabecalho cabecalho;
-    fread(&cabecalho, sizeof(Cabecalho), 1, bin);
+    fread(&cabecalho.status, sizeof(char), 1, bin);
+    fread(&cabecalho.proxRRN, sizeof(int), 1, bin);
+    fread(&cabecalho.nroTecnologia, sizeof(int), 1, bin);
+    fread(&cabecalho.nroParesTecnologia, sizeof(int), 1, bin);
 
     if (cabecalho.status == '0')
     {
@@ -66,7 +69,7 @@ void functionality_3old(const char binArchiveName[], int n)
             }
             else
             {
-                fseek(bin, TAM_REGISTRO - sizeof(char), SEEK_CUR);
+                fseek(bin, TAM_REGISTRO, SEEK_CUR);
             }
         }
 
@@ -198,7 +201,7 @@ void functionality_3(const char binArchiveName[], int n)
             }
             else
             {
-                // fseek(bin, TAM_REGISTRO - sizeof(char), SEEK_CUR);
+                // fseek(bin, TAM_REGISTRO, SEEK_CUR);
             }
         }
 
