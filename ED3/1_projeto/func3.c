@@ -79,7 +79,7 @@ void functionality_3old(const char binArchiveName[], int n)
     fclose(bin);
 }
 
-static void printa_registro(Dados *dados)
+void printa_registro(Dados *dados)
 {
     // nomeTecn:ologiaOrigem,grupo,popularidade,nomeTecnologiaDestino,peso
     // Mostra o nome da origem
