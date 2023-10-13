@@ -17,6 +17,11 @@
                 // "1",
                 // "dados1.csv",
                 // "output_file.bin"
+                
+                // func otimizada
+
+                // "<",
+                // "casos_teste/1.bin"
 
 
                 // func 2
@@ -26,11 +31,11 @@
 
                 // func 3
 
-                // "3",
-                // "output_file.bin",
-                // "5",
-                // "<",
-                // "input.txt",
+                "3",
+                "arquivos_v3/binario7.bin",
+                "1",
+                "<",
+                "input.txt",
 
             ],
 

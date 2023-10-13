@@ -320,11 +320,7 @@ static char **testa_unico(int *prt_quant_tec, Dados dado, char **tecnologies)
     // Verifica se dado.nomeTecnologiaOrigem.string já existe em tecnologies
     for (int i = 0; i < *prt_quant_tec; i++)
     {
-        if (tecnologies[i] == NULL)
-        {
-            printf("\nentrou\t|%i|\t|%s|", i, tecnologies[i]);
-        }
-        else if (strcmp(dado.nomeTecnologiaOrigem.string, tecnologies[i]) == 0)
+        if (strcmp(dado.nomeTecnologiaOrigem.string, tecnologies[i]) == 0)
         {
             flag = 1; // Tecnologia já existe
             break;

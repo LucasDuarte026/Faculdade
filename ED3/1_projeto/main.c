@@ -61,6 +61,7 @@ int main(int argc, char const *argv[])
         break;
 
     case '3':
+        // printf("tamanho cabcalho:\t|%ld|\n",sizeof(Cabecalho)); // teste para averiguar o tamanho do cabecalho no inicio do arquivo
         n = argumento_3[0] - 48;
         binArchiveName = argumento_2;
 

@@ -1,5 +1,9 @@
 1_projeto/main.exe
+1_projeto/main
 1_projeto/valgrind
 tecnologia_teste.csv
 1_projeto/CasosTeste
-1_projeto/arquivos_v2
+1_projeto/casos_teste
+1_projeto/arquivos_v3
+1_projeto/input.txt
+1_projeto/*.bin
