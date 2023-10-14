@@ -1,6 +1,6 @@
 #include "structs.h"
 #include "func3.h"
-#include "func1.h" 
+#include "func1.h"
 //   Precisa do scan_quote_string()
 
 /*  Como não é mais sada, fica comentada
@@ -139,7 +139,7 @@ void printa_registro(Dados *dados)
     {
         printf("%d", dados->peso);
     }
-    printf("\n");   //  Último pulo delinha
+    printf("\r\n"); //  Último pulo delinha
 }
 
 void functionality_3(const char binArchiveName[], int n)
@@ -155,9 +155,12 @@ void functionality_3(const char binArchiveName[], int n)
         return;
     }
 
+    //  Lê o cabeçalho
     Cabecalho cabecalho;
-    fread(&cabecalho, sizeof(Cabecalho), 1, bin);
-
+    fread(&cabecalho.status, sizeof(char), 1, bin);
+    fread(&cabecalho.proxRRN, sizeof(int), 1, bin);
+    fread(&cabecalho.nroTecnologia, sizeof(int), 1, bin);
+    fread(&cabecalho.nroParesTecnologia, sizeof(int), 1, bin);
     if (cabecalho.status == '0')
     {
         printf("Falha no processamento do arquivo.\n");

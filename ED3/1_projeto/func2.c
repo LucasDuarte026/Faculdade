@@ -1,35 +1,45 @@
 #include "structs.h"
 #include "func2.h"
+#include "func3.h"
+// pois a printa_registro() está na func3
 
-    //  Declaração da functionality_2
+
+
+//  Declaração da functionality_2
 void functionality_2(const char binArchiveName[])
 {
-    FILE *bin = fopen(binArchiveName, "rb+"); // abrir o bin para leitura
+    /*
+     *   Inicialização bem semelhante as outras funcionalidades
+     *   Abre o arquivo binário, lê o cabeçario para posicionar devidamente a cabeça leitora para o primeiro RRN
+     */
+    FILE *bin = fopen(binArchiveName, "rb");
     if (bin == NULL)
     {
-        printf("\nFalha no processamento do arquivo.\n");
+        printf("Falha no processamento do arquivo.\n");
         return;
     }
 
-    // Ler o cabecalho
+    //  inicializa o cabeçalho
     Cabecalho cabecalho;
-    fread(&cabecalho, sizeof(Cabecalho), 1, bin);
+    fread(&cabecalho.status, sizeof(char), 1, bin);
+    fread(&cabecalho.proxRRN, sizeof(int), 1, bin);
+    fread(&cabecalho.nroTecnologia, sizeof(int), 1, bin);
+    fread(&cabecalho.nroParesTecnologia, sizeof(int), 1, bin);
 
-    // Função criada para ver status
     if (cabecalho.status == '0')
     {
         printf("\nArquivo binário não está consistente.\n");
         fclose(bin);
         return;
     }
-
+    fseek(bin, TAM_CABECALHO, SEEK_SET); //  Para pular o cabeçalho
     Dados dados;
-    int registros_lidos = 0;
+
+    // le tudo do registro desejado a seguir
     while (fread(&dados.removido, sizeof(char), 1, bin))
     {
-        if (dados.removido == '-')
-        { // Se o registro não estiver removido logicamente
-
+        if (dados.removido == '0') //  Análogo a função já implmentada
+        {
             fread(&dados.grupo, sizeof(int), 1, bin);
             fread(&dados.popularidade, sizeof(int), 1, bin);
             fread(&dados.peso, sizeof(int), 1, bin);
@@ -43,31 +53,12 @@ void functionality_2(const char binArchiveName[])
             dados.nomeTecnologiaDestino.string = (char *)malloc(dados.nomeTecnologiaDestino.tamanho + 1);
             fread(dados.nomeTecnologiaDestino.string, sizeof(char), dados.nomeTecnologiaDestino.tamanho, bin);
             dados.nomeTecnologiaDestino.string[dados.nomeTecnologiaDestino.tamanho] = '\0';
+            
+            printa_registro(&dados);                 //  Utiliza a função já previamente criada na funcionalidade 3 para printar n tela o devido registro
 
-            // Exibir os dados
-            printf("Grupo: %d\n", dados.grupo);
-            printf("Popularidade: %d\n", dados.popularidade);
-            printf("Peso: %d\n", dados.peso);
-            printf("Nome Tecnologia Origem: %s\n", dados.nomeTecnologiaOrigem.string);
-            printf("Nome Tecnologia Destino: %s\n", dados.nomeTecnologiaDestino.string);
-            printf("-------------------------------\n");
-            registros_lidos++;
-
-            // Liberar memória alocada para strings
-            free(dados.nomeTecnologiaOrigem.string);
+            free(dados.nomeTecnologiaOrigem.string); //  Libera as strings variaveis
             free(dados.nomeTecnologiaDestino.string);
         }
-        else
-        {
-            // Se o registro estiver removido logicamente, pular para o próximo registro
-            fseek(bin, TAM_REGISTRO - sizeof(char), SEEK_CUR);
-        }
     }
-
-    if (registros_lidos == 0)
-    {
-        printf("Nenhum registro válido encontrado no arquivo.\n");
-    }
-
     fclose(bin);
 }

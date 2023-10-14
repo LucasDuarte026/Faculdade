@@ -28,7 +28,7 @@ int main()
 
     if (decision != '1' && decision != '2' && decision != '3' && decision != '4')
     {
-        printf("\n\t -> Erro de decisão\n"); // caso a escolha n seja válida
+        printf("-> Erro de decisão\n"); // caso a escolha n seja válida
         return 1;
     }
 
@@ -61,6 +61,7 @@ int main()
         };
         break;
     case '2': // Supondo que a opção 2 seja para recuperar e exibir os dados
+        scanf("%s", argumento_2);
         binArchiveName = argumento_2;
         functionality_2(binArchiveName);
         break;
