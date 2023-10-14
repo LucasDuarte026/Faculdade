@@ -13,14 +13,18 @@
 #include "func3.h"
 #include "func4.h"
 
-
-int main(int argc, char const *argv[])
+int main()
 {
 
     //  -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - --
     //  leitura de entrada de decisão:
 
-    const char decision = *argv[1]; // recebe a decisão
+    char decision;
+    char argumento_1[MAX_STRING_LENGTH];
+    char argumento_2[MAX_STRING_LENGTH];
+    char argumento_3[MAX_STRING_LENGTH];
+    char argumento_4[MAX_STRING_LENGTH];
+    scanf("%c", &decision); // recebe a decisão
 
     if (decision != '1' && decision != '2' && decision != '3' && decision != '4')
     {
@@ -28,9 +32,7 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
-    const char *argumento_1 = argv[1];
-    const char *argumento_2 = argv[2];
-    const char *argumento_3 = argv[3];
+    // scanf("%s", argumento_4);
     // const char *argumento_4 = argv[4];   //  Caso seja necessário
     // const char *argumento_5 = argv[5];   //  Caso seja necessário
 
@@ -47,6 +49,8 @@ int main(int argc, char const *argv[])
     switch (decision)
     {
     case '1':
+        scanf("%s", argumento_2);
+        scanf("%s", argumento_3);
         csvArchiveName = argumento_2;
         binArchiveName = argumento_3;
         // csvArchiveName = "dados1.csv";  // inserção manual do nome dos arquivos para debug
@@ -63,12 +67,18 @@ int main(int argc, char const *argv[])
 
     case '3':
         // printf("tamanho cabcalho:\t|%ld|\n",sizeof(Cabecalho)); // teste para averiguar o tamanho do cabecalho no inicio do arquivo
-        n = argumento_3[0] - 48;    //  Similar a função atoi() só que mais baixo nível e manual
+        scanf("%s", argumento_2);
+        scanf("%s", argumento_3);
+
+        n = atoi(argumento_3); //  pega o valor de n
         binArchiveName = argumento_2;
 
         functionality_3(binArchiveName, n);
         break;
     case '4':
+        scanf("%s", argumento_2);
+        scanf("%s", argumento_3);
+
         binArchiveName = argumento_2;
         RRN = atoi(argumento_3);
         functionality_4(binArchiveName, RRN);
@@ -78,7 +88,6 @@ int main(int argc, char const *argv[])
     }
 
     //  -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - -- -- - --
-
 
     return 0;
 }

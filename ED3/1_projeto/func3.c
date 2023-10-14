@@ -1,7 +1,9 @@
 #include "structs.h"
 #include "func3.h"
-#include "func1.h" //   Precisa do scan_quote_string()
+#include "func1.h" 
+//   Precisa do scan_quote_string()
 
+/*  Como não é mais sada, fica comentada
 void functionality_3old(const char binArchiveName[], int n) //  Funcionalidade usada antigamente sem tratamento de nulos
 {
     FILE *bin = fopen(binArchiveName, "rb");
@@ -81,7 +83,7 @@ void functionality_3old(const char binArchiveName[], int n) //  Funcionalidade u
 
     fclose(bin);
 }
-
+*/
 void printa_registro(Dados *dados)
 {
     /*
@@ -158,7 +160,7 @@ void functionality_3(const char binArchiveName[], int n)
 
     if (cabecalho.status == '0')
     {
-        printf("Falha no processamento do arquivo.\r\n");
+        printf("Falha no processamento do arquivo.\n");
         fclose(bin);
         return;
     }
