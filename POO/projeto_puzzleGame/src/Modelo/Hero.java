@@ -46,6 +46,7 @@ public class Hero extends Personagem implements Serializable {
 
     public boolean moveUp() {
         if (super.moveUp()) {
+            this.mudar_imagem("olha_cima.png");
             return validaPosicao();
         }
         return false;
@@ -53,6 +54,7 @@ public class Hero extends Personagem implements Serializable {
 
     public boolean moveDown() {
         if (super.moveDown()) {
+            this.mudar_imagem("olha_baixo.png");
             return validaPosicao();
         }
         return false;
@@ -60,6 +62,7 @@ public class Hero extends Personagem implements Serializable {
 
     public boolean moveRight() {
         if (super.moveRight()) {
+            this.mudar_imagem("olha_direita.png");
             return validaPosicao();
         }
         return false;
@@ -67,6 +70,7 @@ public class Hero extends Personagem implements Serializable {
 
     public boolean moveLeft() {
         if (super.moveLeft()) {
+            this.mudar_imagem("olha_esquerda.png");
             return validaPosicao();
         }
         return false;
@@ -81,7 +85,7 @@ public class Hero extends Personagem implements Serializable {
     }
 
     public void printQuantKey() {
-        System.out.format("aumentou uma chave para: %d",this.quant_keys);
+        System.out.format("aumentou uma chave para: %d", this.quant_keys);
 
     }
 }

@@ -10,6 +10,8 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,16 +29,20 @@ public abstract class Personagem implements Serializable {
     protected boolean isKey;
     /*para ser chave*/
     protected boolean isBox;
-
     /*para ser caixa*/
+    protected boolean isPorta;
+    /*para ser Porta*/
+
+
+ /*para ser caixa*/
     protected Personagem(String sNomeImagePNG) {
         this.pPosicao = new Posicao(1, 1);
         this.bTransponivel = true;
         this.bMortal = false;
-        this.isKey = false;
-        this.isBox = false;
+        this.isKey = false;/*para ser chave*/
+        this.isBox = false;/*para ser caixa*/
+        this.isPorta = false;
 
-        /*para pegar a chave*/
         try {
             iImage = new ImageIcon(new java.io.File(".").getCanonicalPath() + Consts.PATH + sNomeImagePNG);
             Image img = iImage.getImage();
@@ -55,8 +61,23 @@ public abstract class Personagem implements Serializable {
         return pPosicao;
     }
 
+    public void mudar_imagem(String sNomeImagePNG) {
+        /*usada a mesma lógica acima*/
+        try {
+            iImage = new ImageIcon(new java.io.File(".").getCanonicalPath() + Consts.PATH + sNomeImagePNG);
+            Image img = iImage.getImage();
+            BufferedImage bi = new BufferedImage(Consts.CELL_SIDE, Consts.CELL_SIDE, BufferedImage.TYPE_INT_ARGB);
+            Graphics g = bi.createGraphics();
+            g.drawImage(img, 0, 0, Consts.CELL_SIDE, Consts.CELL_SIDE, null);
+            iImage = new ImageIcon(bi);
+        } catch (IOException ex) {
+            Logger.getLogger(Personagem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     public Posicao getPosicaoAnterior() {
-      
+
         return pPosicaoAnterior;
     }
 
@@ -66,6 +87,9 @@ public abstract class Personagem implements Serializable {
 
     public boolean isbKey() {
         return isKey;
+    }
+    public boolean isbPorta() {
+        return isPorta;
     }
 
     public boolean isbBox() {

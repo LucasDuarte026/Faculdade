@@ -21,11 +21,11 @@ public class ControleDeJogo {
             pIesimoPersonagem = umaFase.get(i);
 
             if (hero.getPosicao().igual(pIesimoPersonagem.getPosicao())) {
-                System.out.println("entrou no asfdawfawfwf");
+                System.out.print("\nInteracao de personagem: ");
                 if (pIesimoPersonagem.isbBox()) {
                     Posicao caixaPos = pIesimoPersonagem.getPosicao();
                     Posicao heroPos = hero.getPosicao();
-                    System.out.println("entrou no teste");
+                    System.out.println("Empurrando caixa");
                     if (heroPos.getColunaAnterior() - caixaPos.getColuna() < 0) {
                         /*caixa vai para cima*/
                         pIesimoPersonagem.setPosicao(caixaPos.getLinha(), caixaPos.getColuna() + 1);
@@ -46,7 +46,6 @@ public class ControleDeJogo {
                 }
 
                 if (pIesimoPersonagem.isbTransponivel()) {
-                    System.out.println("entrou dno transponivel");
 
                     if (pIesimoPersonagem.isbKey()) {
                         hero.addKey();
@@ -55,9 +54,11 @@ public class ControleDeJogo {
                     }
 
                     /*TO-DO: verificar se o personagem eh mortal antes de retirar*/
-                    umaFase.remove(pIesimoPersonagem);
-
+                    if (!pIesimoPersonagem.isbPorta()) {
+                        umaFase.remove(pIesimoPersonagem);
+                    }
                 }
+
             }
 
         }

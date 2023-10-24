@@ -6,6 +6,7 @@ import Modelo.Hero;
 import Modelo.Parede;
 import Modelo.Key;
 import Modelo.Box;
+import Modelo.Porta;
 import Modelo.BichinhoVaiVemHorizontal;
 import Auxiliar.Consts;
 import Auxiliar.Desenho;
@@ -56,7 +57,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         faseAtual = new ArrayList<Personagem>();
 
         /*Cria faseAtual adiciona personagens*/
-        hero = new Hero("skoot.png");
+        hero = new Hero("olha_baixo.png");
         hero.setPosicao(0, 0);
         this.addPersonagem(hero);
 
@@ -82,13 +83,22 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
          */
         init_paredes_fase1();
 
-        Box caixa1 = new Box("coracao.png");
+        Box caixa1 = new Box("box.png");
         caixa1.setPosicao(5, 2);
         this.addPersonagem(caixa1);
 
-        Box caixa2 = new Box("coracao.png");
+        Box caixa2 = new Box("box.png");
         caixa2.setPosicao(5, 6);
         this.addPersonagem(caixa2);
+        
+        Porta porta1 = new Porta("porta_fechada.png");
+        porta1.setPosicao(5, 4);
+        this.addPersonagem(porta1);
+        
+        Porta porta2 = new Porta("porta_fechada.png");
+        porta2.setPosicao(5, 7);
+        this.addPersonagem(porta2);
+        
     }
 
     public void init_paredes_fase1() {
