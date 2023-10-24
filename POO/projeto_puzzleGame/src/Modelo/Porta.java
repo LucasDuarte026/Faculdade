@@ -11,7 +11,7 @@ public class Porta extends Personagem implements Serializable {
 
     public Porta(String sNomeImagePNG) {
         super(sNomeImagePNG);
-        this.bTransponivel = true;
+        this.bTransponivel = false;
         this.isPorta = true;
 
     }

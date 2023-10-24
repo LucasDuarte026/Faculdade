@@ -85,7 +85,10 @@ public class Hero extends Personagem implements Serializable {
     }
 
     public void printQuantKey() {
-        System.out.format("aumentou uma chave para: %d", this.quant_keys);
+        System.out.format("Quantidade de chaves e: %d", this.quant_keys);
 
+    }
+    public int getKeyQuant(){
+        return this.quant_keys;
     }
 }

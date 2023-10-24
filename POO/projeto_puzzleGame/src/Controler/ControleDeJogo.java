@@ -22,6 +22,18 @@ public class ControleDeJogo {
 
             if (hero.getPosicao().igual(pIesimoPersonagem.getPosicao())) {
                 System.out.print("\nInteracao de personagem: ");
+                if (pIesimoPersonagem.isbPorta() && !pIesimoPersonagem.isbTransponivel()) {
+
+                    if (hero.getKeyQuant() > 0) {
+                        pIesimoPersonagem.mudar_imagem("porta_aberta.png");
+                        pIesimoPersonagem.setbTransponivel(true);
+                        hero.subtractKey();
+                    } else {
+                        hero.voltaAUltimaPosicao();
+                        System.out.println("chaves insuficientes, va atras!");
+                        hero.printQuantKey();
+                    }
+                }
                 if (pIesimoPersonagem.isbBox()) {
                     Posicao caixaPos = pIesimoPersonagem.getPosicao();
                     Posicao heroPos = hero.getPosicao();
@@ -72,7 +84,12 @@ public class ControleDeJogo {
             pIesimoPersonagem = umaFase.get(i);
             if (!pIesimoPersonagem.isbTransponivel()) {
                 if (pIesimoPersonagem.getPosicao().igual(p)) {
-                    return false;
+                    if (pIesimoPersonagem.isbPorta()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
                 }
             }
         }
