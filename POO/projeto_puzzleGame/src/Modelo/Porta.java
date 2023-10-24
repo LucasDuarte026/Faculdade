@@ -9,11 +9,11 @@ import java.io.Serializable;
 
 public class Porta extends Personagem implements Serializable {
 
+
     public Porta(String sNomeImagePNG) {
         super(sNomeImagePNG);
         this.bTransponivel = false;
         this.isPorta = true;
-
     }
 
     public void autoDesenho() {
@@ -30,7 +30,5 @@ public class Porta extends Personagem implements Serializable {
         }
     }
 
-    public void move_box(Posicao anterior) {
-
-    }
+    
 }

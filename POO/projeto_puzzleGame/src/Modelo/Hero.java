@@ -15,14 +15,27 @@ import javax.swing.JPanel;
 public class Hero extends Personagem implements Serializable {
 
     protected int quant_keys = 0;
+    protected int opened_doors = 0;
+    protected int doorMissionQuant;
 
-    public Hero(String sNomeImagePNG) {
+    public Hero(String sNomeImagePNG, int doorMissionQuant) {
         super(sNomeImagePNG);
+        this.doorMissionQuant = doorMissionQuant;
+    }
 
+    public boolean faseFinalizada() {
+        if (opened_doors >= this.doorMissionQuant) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void voltaAUltimaPosicao() {
         this.pPosicao.volta();
+        if (doorMissionQuant > 2) {
+
+        }
     }
 
     public boolean setPosicao(int linha, int coluna) {
@@ -88,7 +101,14 @@ public class Hero extends Personagem implements Serializable {
         System.out.format("Quantidade de chaves e: %d", this.quant_keys);
 
     }
-    public int getKeyQuant(){
+
+    public int getKeyQuant() {
         return this.quant_keys;
     }
+
+    public void add_doorOpened() {
+        this.opened_doors++;
+    }
+   
+ 
 }

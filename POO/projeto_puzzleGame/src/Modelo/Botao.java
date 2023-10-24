@@ -10,7 +10,8 @@ public class Botao extends Personagem implements Serializable{
     
     public Botao(String sNomeImagePNG) {
         super(sNomeImagePNG);
-        this.bTransponivel = false;
+        this.bTransponivel = true;
+        this.isBotao=true;
     }
 
     public void autoDesenho() {

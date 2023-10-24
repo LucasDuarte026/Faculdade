@@ -32,9 +32,11 @@ public abstract class Personagem implements Serializable {
     /*para ser caixa*/
     protected boolean isPorta;
     /*para ser Porta*/
+    protected boolean isBotao;
+    /*para ser botão*/
+    protected boolean isSpecialBlock;
 
-
- /*para ser caixa*/
+    /*para ser a parede passável*/
     protected Personagem(String sNomeImagePNG) {
         this.pPosicao = new Posicao(1, 1);
         this.bTransponivel = true;
@@ -42,6 +44,9 @@ public abstract class Personagem implements Serializable {
         this.isKey = false;/*para ser chave*/
         this.isBox = false;/*para ser caixa*/
         this.isPorta = false;
+        /*Para ver se é porta*/
+        this.isBotao = false;
+        /*Para ver se é porta*/
 
         try {
             iImage = new ImageIcon(new java.io.File(".").getCanonicalPath() + Consts.PATH + sNomeImagePNG);
@@ -88,6 +93,7 @@ public abstract class Personagem implements Serializable {
     public boolean isbKey() {
         return isKey;
     }
+
     public boolean isbPorta() {
         return isPorta;
     }
@@ -96,8 +102,20 @@ public abstract class Personagem implements Serializable {
         return this.isBox;
     }
 
+    public boolean isbBotao() {
+        return this.isBotao;
+    }
+
     public void setbTransponivel(boolean bTransponivel) {
         this.bTransponivel = bTransponivel;
+    }
+
+    public void setSpecialBlock(boolean set) {
+        this.isSpecialBlock = set;
+    }
+
+    public boolean isSpecialBlock() {
+        return this.isSpecialBlock;
     }
 
     public void autoDesenho() {

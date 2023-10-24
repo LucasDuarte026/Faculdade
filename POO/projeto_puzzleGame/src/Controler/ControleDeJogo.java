@@ -3,10 +3,13 @@ package Controler;
 import Modelo.Personagem;
 import Modelo.Hero;
 import Modelo.Box;
+import Modelo.Parede;
 import auxiliar.Posicao;
 import java.util.ArrayList;
 
 public class ControleDeJogo {
+
+    boolean FlagPassouBotao = false;
 
     public void desenhaTudo(ArrayList<Personagem> e) {
         for (int i = 0; i < e.size(); i++) {
@@ -15,23 +18,31 @@ public class ControleDeJogo {
     }
 
     public void processaTudo(ArrayList<Personagem> umaFase) {
-        Hero hero = (Hero) umaFase.get(0);
-        Personagem pIesimoPersonagem;
+            Hero hero = (Hero) umaFase.get(0);
+            Personagem pIesimoPersonagem;
         for (int i = 1; i < umaFase.size(); i++) {
             pIesimoPersonagem = umaFase.get(i);
 
             if (hero.getPosicao().igual(pIesimoPersonagem.getPosicao())) {
                 System.out.print("\nInteracao de personagem: ");
-                if (pIesimoPersonagem.isbPorta() && !pIesimoPersonagem.isbTransponivel()) {
+                if (pIesimoPersonagem.isbPorta()) {
 
-                    if (hero.getKeyQuant() > 0) {
-                        pIesimoPersonagem.mudar_imagem("porta_aberta.png");
-                        pIesimoPersonagem.setbTransponivel(true);
-                        hero.subtractKey();
-                    } else {
-                        hero.voltaAUltimaPosicao();
-                        System.out.println("chaves insuficientes, va atras!");
-                        hero.printQuantKey();
+                    if (hero.faseFinalizada()) {
+                        System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
+                        System.out.println("Parabens, voce passou para a proxima fase!");
+                        System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
+                    }
+                    if (!pIesimoPersonagem.isbTransponivel()) {
+                        if (hero.getKeyQuant() > 0) {
+                            pIesimoPersonagem.mudar_imagem("porta_aberta.png");
+                            pIesimoPersonagem.setbTransponivel(true);
+                            hero.subtractKey();
+                            hero.add_doorOpened();
+                        } else {
+                            hero.voltaAUltimaPosicao();
+                            System.out.println("chaves insuficientes, va atras!");
+                            hero.printQuantKey();
+                        }
                     }
                 }
                 if (pIesimoPersonagem.isbBox()) {
@@ -56,25 +67,32 @@ public class ControleDeJogo {
                     }
                     break;
                 }
-
                 if (pIesimoPersonagem.isbTransponivel()) {
 
                     if (pIesimoPersonagem.isbKey()) {
                         hero.addKey();
                         hero.printQuantKey();
-
-                    }
-
-                    /*TO-DO: verificar se o personagem eh mortal antes de retirar*/
-                    if (!pIesimoPersonagem.isbPorta()) {
                         umaFase.remove(pIesimoPersonagem);
+
+                    } else if (pIesimoPersonagem.isbBotao() && !FlagPassouBotao) {
+                        pIesimoPersonagem.mudar_imagem("botao_verde");
+                        Personagem bloco_especial;
+                        for (int k = 1; k < umaFase.size(); k++) {
+                            bloco_especial = umaFase.get(k);
+                            if (bloco_especial.isSpecialBlock()) {
+                                System.out.println("bloco especial");
+                                bloco_especial.mudar_imagem("brick_quebrado.png");
+                                bloco_especial.setbTransponivel(true);
+                                break;
+                            }
+                        }
+
+                        FlagPassouBotao = true;
                     }
                 }
-
             }
 
         }
-
     }
 
     /*Retorna true se a posicao p é válida para Hero com relacao a todos os personagens no array*/
