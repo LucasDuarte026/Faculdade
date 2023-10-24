@@ -17,23 +17,25 @@ public class ControleDeJogo {
         }
     }
 
-    public void processaTudo(ArrayList<Personagem> umaFase) {
-            Hero hero = (Hero) umaFase.get(0);
-            Personagem pIesimoPersonagem;
+    public boolean processaTudo(ArrayList<Personagem> umaFase) {
+        Hero hero = (Hero) umaFase.get(0);
+        Personagem pIesimoPersonagem;
         for (int i = 1; i < umaFase.size(); i++) {
             pIesimoPersonagem = umaFase.get(i);
 
             if (hero.getPosicao().igual(pIesimoPersonagem.getPosicao())) {
-                System.out.print("\nInteracao de personagem: ");
-                if (pIesimoPersonagem.isbPorta()) {
 
+                if (pIesimoPersonagem.isbPorta()) {
                     if (hero.faseFinalizada()) {
                         System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
                         System.out.println("Parabens, voce passou para a proxima fase!");
                         System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
+                        return true;
                     }
                     if (!pIesimoPersonagem.isbTransponivel()) {
                         if (hero.getKeyQuant() > 0) {
+                            System.out.print("\nInteracao de personagem: Porta aberta");
+
                             pIesimoPersonagem.mudar_imagem("porta_aberta.png");
                             pIesimoPersonagem.setbTransponivel(true);
                             hero.subtractKey();
@@ -46,6 +48,7 @@ public class ControleDeJogo {
                     }
                 }
                 if (pIesimoPersonagem.isbBox()) {
+                    System.out.print("\nInteracao de personagem: ");
                     Posicao caixaPos = pIesimoPersonagem.getPosicao();
                     Posicao heroPos = hero.getPosicao();
                     System.out.println("Empurrando caixa");
@@ -67,20 +70,24 @@ public class ControleDeJogo {
                     }
                     break;
                 }
-                if (pIesimoPersonagem.isbTransponivel()) {
 
+                if (pIesimoPersonagem.isbTransponivel()) {
                     if (pIesimoPersonagem.isbKey()) {
+                        System.out.print("\nInteracao de personagem: ");
+
                         hero.addKey();
                         hero.printQuantKey();
                         umaFase.remove(pIesimoPersonagem);
 
                     } else if (pIesimoPersonagem.isbBotao() && !FlagPassouBotao) {
-                        pIesimoPersonagem.mudar_imagem("botao_verde");
+                        System.out.print("\nInteracao de personagem: apertou o botao ");
+
+                        pIesimoPersonagem.mudar_imagem("botao_verde.png");
                         Personagem bloco_especial;
                         for (int k = 1; k < umaFase.size(); k++) {
                             bloco_especial = umaFase.get(k);
                             if (bloco_especial.isSpecialBlock()) {
-                                System.out.println("bloco especial");
+                                System.out.println("Passagem pelo muro quebrado aberto");
                                 bloco_especial.mudar_imagem("brick_quebrado.png");
                                 bloco_especial.setbTransponivel(true);
                                 break;
@@ -93,6 +100,7 @@ public class ControleDeJogo {
             }
 
         }
+        return false;
     }
 
     /*Retorna true se a posicao p é válida para Hero com relacao a todos os personagens no array*/

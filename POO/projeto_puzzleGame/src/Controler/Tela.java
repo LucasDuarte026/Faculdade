@@ -43,8 +43,11 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     private ControleDeJogo cj = new ControleDeJogo();
     private Graphics g2;
     private boolean flagSpecialBlock;
+    private int contador_fase;
 
     public Tela() {
+        this.contador_fase = 1;
+
         Desenho.setCenario(this);
         initComponents();
         this.addMouseListener(this);
@@ -57,22 +60,46 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                 Consts.RES * Consts.CELL_SIDE + getInsets().top + getInsets().bottom);
 
         init_fase1();
+        if (contador_fase == 2) {
+            System.out.println("\n\nFase2 começou");
+        }
+    }
 
-       
+    public void passaDeFase() {
+        switch (contador_fase) {
+            case 2:
+                contador_fase++;
+                init_fase2();
+                break;
+            case 3:
+                contador_fase++;
+                //  init_fase2();
+                break;
+            case 4:
+                contador_fase++;
+                //   init_fase2();
+                break;
+        }
     }
 
     public void init_fase1() {
+
+        System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+        System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
+        System.out.println("|\n|\tFase1:\n-> Colete 3 chaves para abrir cada porta, a ultima eh a saida da fase ");
+
+        System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
         int fase1_door_quant = 3;
         flagSpecialBlock = false;
-        
+
         /*Cria o heroi primeiro que todo mundo*/
         hero = new Hero("olha_baixo.png", fase1_door_quant);
         hero.setPosicao(0, 0);
         this.addPersonagem(hero);
-        
-        
+
         int quant_paredes = 100;
         int quant_caixas = 2;
         int quant_portas = 3;
@@ -92,7 +119,6 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         Porta portas[] = new Porta[quant_portas];
         Key keys[] = new Key[quant_chaves];
         Botao botoes[] = new Botao[quant_botoes];
-
         int[][] fase_1
                 = {
                     {0, 0, 0, 1, 2, 1, 1, 1, 0, 0, 0},
@@ -136,7 +162,6 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                         bricks[counter_paredes].setPosicao(i, j);
                         if (this.flagSpecialBlock) {
                             bricks[counter_paredes].setSpecialBlock(true);
-                            System.out.format("%d\n", faseAtual.size());
                             this.flagSpecialBlock = false;
                         }
                         this.addPersonagem(bricks[counter_paredes]);
@@ -180,17 +205,18 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     }
 
     public void init_fase2() {
+        System.out.println("\n\nInicio da segunda Fase\n\tBusque as chaves e mate os oponentes;");
+
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
         int fase1_door_quant = 3;
         flagSpecialBlock = false;
-        
+
         /*Cria o heroi primeiro que todo mundo*/
         hero = new Hero("olha_baixo.png", fase1_door_quant);
         hero.setPosicao(0, 0);
         this.addPersonagem(hero);
-        
-        
+
         int quant_paredes = 100;
         int quant_caixas = 2;
         int quant_portas = 3;
@@ -364,7 +390,10 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         }
         if (!this.faseAtual.isEmpty()) {
             this.cj.desenhaTudo(faseAtual);
-            this.cj.processaTudo(faseAtual);
+            if (this.cj.processaTudo(faseAtual)) {
+                contador_fase++;
+                passaDeFase();
+            }
         }
 
         g.dispose();
@@ -395,6 +424,10 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
             hero.moveLeft();
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             hero.moveRight();
+        } else if (e.getKeyCode() == KeyEvent.VK_R) {
+            // resetaFase();
+        } else if (e.getKeyCode() == KeyEvent.VK_I) {
+            init_fase1();
         }
 
         this.setTitle("-> Cell: " + (hero.getPosicao().getColuna()) + ", "
