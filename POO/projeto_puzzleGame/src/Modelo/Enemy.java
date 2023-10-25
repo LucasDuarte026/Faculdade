@@ -6,10 +6,10 @@ import Controler.Tela;
 import java.awt.Graphics;
 import java.io.Serializable;
 
-public class Caveira extends Personagem implements Serializable{
+public class Enemy extends Personagem implements Serializable{
     private int iContaIntervalos;
     
-    public Caveira(String sNomeImagePNG) {
+    public Enemy(String sNomeImagePNG) {
         super(sNomeImagePNG);
         this.bTransponivel = false;
         this.iContaIntervalos = 0;
@@ -22,7 +22,7 @@ public class Caveira extends Personagem implements Serializable{
         if(this.iContaIntervalos == Consts.TIMER){
             this.iContaIntervalos = 0;
             Fogo f = new Fogo("fire.png");
-            f.setPosicao(pPosicao.getLinha(),pPosicao.getColuna()+3);
+            f.setPosicao(pPosicao.getLinha(),pPosicao.getColuna());
             Desenho.acessoATelaDoJogo().addPersonagem(f);
         }
     }    

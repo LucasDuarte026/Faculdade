@@ -7,6 +7,7 @@ import Modelo.Parede;
 import Modelo.Key;
 import Modelo.Box;
 import Modelo.Botao;
+import Modelo.Enemy;
 import Modelo.Porta;
 import Modelo.BichinhoVaiVemHorizontal;
 import Auxiliar.Consts;
@@ -86,6 +87,9 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
         System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
         System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
+        System.out.println("| - Aperte R caso queira resetar ");
+        System.out.println("| - Aperte S caso queira salvar ");
+
         System.out.println("|\n|\tFase1:\n-> Colete 3 chaves para abrir cada porta, a ultima eh a saida da fase ");
 
         System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
@@ -105,13 +109,14 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int quant_portas = 3;
         int quant_chaves = 4;
         int quant_botoes = 3;
+        int quant_enemies = 3;
 
         int counter_paredes = 0;
         int counter_caixas = 0;
         int counter_portas = 0;
         int counter_chaves = 0;
         int counter_botoes = 0;
-
+        int counter_enemies = 0;
 
         /*  criando o vetor de objetos*/
         Parede bricks[] = new Parede[quant_paredes];
@@ -119,6 +124,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         Porta portas[] = new Porta[quant_portas];
         Key keys[] = new Key[quant_chaves];
         Botao botoes[] = new Botao[quant_botoes];
+        Enemy enemies[] = new Enemy[quant_enemies];
+
         int[][] fase_1
                 = {
                     {0, 0, 0, 1, 2, 1, 1, 1, 0, 0, 0},
@@ -130,7 +137,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
                     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
                     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 5},
-                    {0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0},
+                    {0, 0, 8, 1, 8, 1, 0, 1, 1, 1, 0},
                     {0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 4}
 
                 };
@@ -146,7 +153,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                     5 -> botão
                     6 -> parede especial
                     7 -> porta saida
-                    8
+                    8 -> inimigo
                     9
     
                  */
@@ -196,6 +203,13 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                         this.addPersonagem(botoes[counter_botoes]);
                         counter_botoes++;
                         break;
+                    case 8:
+
+                        enemies[counter_enemies] = new Enemy("morty.png");
+                        enemies[counter_enemies].setPosicao(i, j);
+                        this.addPersonagem(enemies[counter_enemies]);
+                        counter_enemies++;
+                        break;
 
                     default:
                         break;
@@ -205,11 +219,16 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     }
 
     public void init_fase2() {
-        System.out.println("\n\nInicio da segunda Fase\n\tBusque as chaves e mate os oponentes;");
+
+        System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+        System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
+        System.out.println("|\n|\tFase1:\n-> Colete 3 chaves para abrir cada porta, a ultima eh a saida da fase ");
+
+        System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
 
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
-        int fase1_door_quant = 3;
+        int fase1_door_quant = 4;
         flagSpecialBlock = false;
 
         /*Cria o heroi primeiro que todo mundo*/
@@ -219,7 +238,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
         int quant_paredes = 100;
         int quant_caixas = 2;
-        int quant_portas = 3;
+        int quant_portas = 4;
         int quant_chaves = 4;
         int quant_botoes = 3;
 
@@ -236,7 +255,6 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         Porta portas[] = new Porta[quant_portas];
         Key keys[] = new Key[quant_chaves];
         Botao botoes[] = new Botao[quant_botoes];
-
         int[][] fase_1
                 = {
                     {0, 0, 0, 1, 2, 1, 1, 1, 0, 0, 0},
@@ -247,9 +265,9 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                     {0, 1, 3, 0, 4, 1, 0, 0, 4, 1, 0},
                     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
                     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 5},
+                    {0, 1, 3, 1, 0, 1, 0, 1, 0, 1, 5},
                     {0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0},
-                    {0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 4}
+                    {0, 0, 3, 1, 0, 0, 0, 0, 0, 1, 4}
 
                 };
         for (int i = 0; i < 11; i++) {
@@ -264,7 +282,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                     5 -> botão
                     6 -> parede especial
                     7 -> porta saida
-                    8
+                    8 ->
                     9
     
                  */
@@ -280,7 +298,6 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                         bricks[counter_paredes].setPosicao(i, j);
                         if (this.flagSpecialBlock) {
                             bricks[counter_paredes].setSpecialBlock(true);
-                            System.out.format("%d\n", faseAtual.size());
                             this.flagSpecialBlock = false;
                         }
                         this.addPersonagem(bricks[counter_paredes]);
@@ -425,8 +442,6 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             hero.moveRight();
         } else if (e.getKeyCode() == KeyEvent.VK_R) {
-            // resetaFase();
-        } else if (e.getKeyCode() == KeyEvent.VK_I) {
             init_fase1();
         }
 
