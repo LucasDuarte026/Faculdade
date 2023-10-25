@@ -4,7 +4,7 @@ import Auxiliar.Consts;
 import Auxiliar.Desenho;
 import Controler.ControleDeJogo;
 import Controler.Tela;
-import Controler.Tiro;
+import Modelo.Tiro;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -35,18 +35,16 @@ public class Hero extends Personagem implements Serializable {
 
         this.iContaIntervalos++;
 
-        if (this.iContaIntervalos == Consts.TIMER) {
-            this.iContaIntervalos = 0;
+        
+
+    }
+
+    public void gunFire(){
             Tiro f = new Tiro("fire.png", orientation);
 //            f.decide_direction(orientation);
             f.setPosicao(pPosicao.getLinha(), pPosicao.getColuna());
             Desenho.acessoATelaDoJogo().addPersonagem(f);
-
-        }
-
     }
-
-    
 
     public boolean faseFinalizada() {
         if (opened_doors >= this.doorMissionQuant) {

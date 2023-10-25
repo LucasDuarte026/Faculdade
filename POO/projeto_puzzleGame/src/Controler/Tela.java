@@ -85,14 +85,14 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
     public void init_fase1() {
 
-        System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+        System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
         System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
         System.out.println("| - Aperte R caso queira resetar ");
         System.out.println("| - Aperte S caso queira salvar ");
 
         System.out.println("|\n|\tFase1:\n-> Colete 3 chaves para abrir cada porta, a ultima eh a saida da fase ");
 
-        System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+        System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
 
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
@@ -441,6 +441,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
             hero.moveLeft();
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             hero.moveRight();
+        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            hero.gunFire();
         } else if (e.getKeyCode() == KeyEvent.VK_R) {
             init_fase1();
         }

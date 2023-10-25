@@ -25,7 +25,7 @@ public class ControleDeJogo {
 
             if (hero.getPosicao().igual(pIesimoPersonagem.getPosicao())) {
 
-                if (pIesimoPersonagem.isbPorta()) {
+                if (pIesimoPersonagem.isbPorta()) {                    
                     if (hero.faseFinalizada()) {
                         System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
                         System.out.println("Parabens, voce passou para a proxima fase!");
