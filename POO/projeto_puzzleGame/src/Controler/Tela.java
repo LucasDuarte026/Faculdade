@@ -138,7 +138,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     public void init_fase1() {
 
         System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
-        System.out.println("\t\t| Fase 1 |");
+        System.out.println("\t\t|\n\n Fase 1 |");
 
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
@@ -199,7 +199,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                     {-5, 1, 0, 1, 0, 8, 0, 9, 0, 1, 4}
                      */
                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 0, 0, 0, 1, 2, 1, 1, 1, 9, 0, 0, 1},
+                    {1, 0,-5, 0, 1, 2, 1, 1, 1, 9, 0, 0, 1},
                     {1, 1, 1, 0, 1, 9, 1, 0, 1, 0, 1, 0, 1},
                     {1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 8, 1},
                     {1, 6, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
@@ -348,7 +348,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
     public void init_fase2() {
         System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
-        System.out.println("\t\t| Fase 2 |");
+        System.out.println("\t\t|\n\n Fase 2 |");
 
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
@@ -541,7 +541,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
     public void init_fase3() {
         System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
-        System.out.println("\t\t| Fase 3 |");
+        System.out.println("\t\t|\n\n Fase 3 |");
 
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
@@ -734,7 +734,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
     public void init_fase4() {
         System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
-        System.out.println("\t\t| Fase 4 |");
+        System.out.println("\t\t|\n\n Fase 4 |");
 
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();

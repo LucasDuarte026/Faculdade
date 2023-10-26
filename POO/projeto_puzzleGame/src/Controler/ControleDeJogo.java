@@ -36,6 +36,7 @@ public class ControleDeJogo {
                         System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
                         System.out.println("Parabens, voce passou para a proxima fase!");
                         System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
+                        FlagPassouBotao = !FlagPassouBotao;
                         return 1;
                     }
                     if (!pIesimoPersonagem.isbTransponivel()) {
@@ -99,7 +100,7 @@ public class ControleDeJogo {
                             }
                         }
 
-                        FlagPassouBotao = true;
+//                        FlagPassouBotao = true;
                     } else if (pIesimoPersonagem.isbHeart()) {
                         umaFase.remove(pIesimoPersonagem);
                         hero.add_lifeQuant();
