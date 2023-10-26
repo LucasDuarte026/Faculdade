@@ -16,7 +16,7 @@ public class Enemy extends Personagem implements Serializable {
     public Enemy(String sNomeImagePNG) {
 
         super(sNomeImagePNG);
-        this.bTransponivel = false;
+        this.bTransponivel = true;
         this.timer = random.nextInt(10);
         this.pointer = random.nextInt(4)+1;
         this.isEnemy = true;

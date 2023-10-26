@@ -50,6 +50,14 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     private int contador_fase;
 
     public Tela() {
+
+        System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+        System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
+        System.out.println("| - Aperte R caso queira resetar ");
+        System.out.println("| - Aperte S caso queira salvar ");
+        System.out.println("|\n|\tMissao:\n-> Colete todas chaves para abrir cada porta, a ultima eh a saida da fase ");
+        System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+
         this.contador_fase = 1;
 
         Desenho.setCenario(this);
@@ -70,6 +78,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     }
 
     public void passaDeFase() {
+        System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+
         switch (contador_fase) {
             case 2:
                 contador_fase++;
@@ -89,13 +99,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     public void init_fase1() {
 
         System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
-        System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
-        System.out.println("| - Aperte R caso queira resetar ");
-        System.out.println("| - Aperte S caso queira salvar ");
-
-        System.out.println("|\n|\tFase1:\n-> Colete 3 chaves para abrir cada porta, a ultima eh a saida da fase ");
-
-        System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+        System.out.println("\t\t| Fase 1 |");
 
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
@@ -117,7 +121,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int quant_enemies = 5;
         int quant_mobs = 5;
         int quant_hearts = 2;
-        int quant_setas = 10;
+        int quant_setas = 10; //  Decidido não implementar
 
         int counter_paredes = 0;
         int counter_caixas = 0;
@@ -127,7 +131,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int counter_enemies = 0;
         int counter_mobs = 0;
         int counter_hearts = 0;
-        int counter_setas = 0;
+        int counter_setas = 0; //  Decidido não implementar
 
         /*  criando o vetor de objetos*/
         Parede bricks[] = new Parede[quant_paredes];
@@ -138,21 +142,21 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         Enemy enemies[] = new Enemy[quant_enemies];
         Mob mobs[] = new Mob[quant_mobs];
         Heart cores[] = new Heart[quant_hearts];
-        Seta setas[] = new Seta[quant_setas];
+        Seta setas[] = new Seta[quant_setas];  //  Decidido não implementar
 
         int[][] fase_1
                 = {
                     {0, 0, 0, 1, 2, 1, 1, 1, 9, 0, 0},
-                    {1, 1,-4, 1, 9, 1, 0, 1, 0, 1, 0},
+                    {1, 1, 0, 1, 9, 1, 0, 1, 0, 1, 0},
                     {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 8},
                     {6, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
                     {2, 1, 8, 1, 4, 1, 0, 1, 0, 1, 0},
                     {0, 1, 3, 0, 0, 1, 9, 0, 4, 1, 0},
                     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 0, 1, -2, 1, 0, 1, 8, 1, 0},
+                    {0, 1, 0, 1, 0, 1, 0, 1, 8, 1, 0},
                     {0, 1, 8, 1, 0, 1, 0, 1, 0, 1, 5},
-                    {0, 0, -3, 1, 0, 1, 0, 1, 1, 1, 0},
-                    {-5, 1,0,1, 0, 8,-1, 9, 0, 1, 4}
+                    {0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0},
+                    {-5, 1, 0, 1, 0, 8, 0, 9, 0, 1, 4}
                 /*
                     index:
                     0 -> fundo preto
@@ -285,18 +289,13 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                 }
             }
         }
+
     }
 
-    public void init_fase2() {
+      public void init_fase2() {
 
         System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
-        System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
-        System.out.println("| - Aperte R caso queira resetar ");
-        System.out.println("| - Aperte S caso queira salvar ");
-
-        System.out.println("|\n|\tFase1:\n-> Colete 3 chaves para abrir cada porta, a ultima eh a saida da fase ");
-
-        System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+        System.out.println("\t\t| Fase 2 |");
 
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
@@ -306,7 +305,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         flagSpecialBlock = false;
 
         /*Cria o heroi primeiro que todo mundo*/
-        hero = new Hero("olha_baixo.png", fase1_door_quant, fase1_kiils_quant);
+        hero = new Hero("olha_baixo.png", fase1_door_quant, fase1_kiils_quant);;
         hero.setPosicao(0, 0);
         this.addPersonagem(hero);
 
@@ -318,6 +317,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int quant_enemies = 5;
         int quant_mobs = 5;
         int quant_hearts = 2;
+        int quant_setas = 10; //  Decidido não implementar
 
         int counter_paredes = 0;
         int counter_caixas = 0;
@@ -327,7 +327,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int counter_enemies = 0;
         int counter_mobs = 0;
         int counter_hearts = 0;
-
+        int counter_setas = 0; //  Decidido não implementar
 
         /*  criando o vetor de objetos*/
         Parede bricks[] = new Parede[quant_paredes];
@@ -338,20 +338,21 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         Enemy enemies[] = new Enemy[quant_enemies];
         Mob mobs[] = new Mob[quant_mobs];
         Heart cores[] = new Heart[quant_hearts];
+        Seta setas[] = new Seta[quant_setas];  //  Decidido não implementar
 
-        int[][] fase_1
+        int[][] fase_2
                 = {
                     {0, 0, 0, 1, 2, 1, 1, 1, 9, 0, 0},
                     {1, 1, 0, 1, 9, 1, 0, 1, 0, 1, 0},
-                    {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {6, 1, 8, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {2, 1, 8, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 3, 0, 4, 1, 9, 0, 4, 1, 0},
-                    {0, 1, 8, 1, -5, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 8, 1, 0, 1, 0, 1, 0, 1, 0},
+                    {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 8},
+                    {6, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+                    {2, 1, 8, 1, 4, 1, 0, 1, 0, 1, 0},
+                    {0, 1, 3, 0, 0, 1, 9, 0, 4, 1, 0},
+                    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+                    {0, 1, 0, 1, 0, 1, 0, 1, 8, 1, 0},
                     {0, 1, 8, 1, 0, 1, 0, 1, 0, 1, 5},
                     {0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0},
-                    {-5, 1, 0, 1, 0, 0, 0, 9, 0, 1, 4}
+                    {-5, 1, 0, 1, 0, 8, 0, 9, 0, 1, 4}
                 /*
                     index:
                     0 -> fundo preto
@@ -362,10 +363,20 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                     5 -> botão
                     6 -> parede especial
                     7 -> porta saida
-                    8 -> inimigo tiro
-                    9 -> inimigo andando
-                   -1 -> coração
-    
+                    8 -> Enemy inimigo tiro
+                    9 -> Mob inimigo andando
+                   -1 -> seta direita        
+                   -2 -> seta baixo
+                   -3 -> seta esquerda
+                   -4 -> seta cima
+                   -5 -> coração
+                        
+                 */
+ /*             Direções
+                   1 -> direita
+                   2 -> baixo
+                   3 -> esquerda
+                   4 -> cima
                  */
                 };
         for (int i = 0; i < 11; i++) {
@@ -388,6 +399,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                         this.addPersonagem(bricks[counter_paredes]);
                         counter_paredes++;
                         break;
+
                     case 2:
 
                         keys[counter_chaves] = new Key("key1.png");
@@ -431,6 +443,37 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                         this.addPersonagem(mobs[counter_mobs]);
                         counter_mobs++;
                         break;
+
+                    case -1:
+                        System.out.println("entrou");
+                        setas[counter_setas] = new Seta("azul_direita.png");
+                        setas[counter_setas].setPosicao(i, j);
+                        this.addPersonagem(setas[counter_setas]);
+                        counter_setas++;
+                        break;
+                    case -2:
+                        System.out.println("entrou");
+                        setas[counter_setas] = new Seta("laranja_baixo.png");
+                        setas[counter_setas].setPosicao(i, j);
+                        this.addPersonagem(setas[counter_setas]);
+                        counter_setas++;
+                        break;
+                    case -3:
+                        System.out.println("entrou");
+                        setas[counter_setas] = new Seta("azul_esquerda.png");
+                        setas[counter_setas].setPosicao(i, j);
+                        this.addPersonagem(setas[counter_setas]);
+                        counter_setas++;
+                        break;
+                    case -4:
+                        System.out.println("entrou");
+                        setas[counter_setas] = new Seta("laranja"
+                                + "_cima.png");
+                        setas[counter_setas].setPosicao(i, j);
+                        this.addPersonagem(setas[counter_setas]);
+                        counter_setas++;
+                        break;
+
                     case -5:
                         cores[counter_hearts] = new Heart("heart.png");
                         cores[counter_hearts].setPosicao(i, j);
@@ -442,6 +485,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                 }
             }
         }
+
     }
 
     // ideia inicial para instalar as paredes

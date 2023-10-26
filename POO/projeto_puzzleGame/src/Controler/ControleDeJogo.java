@@ -15,6 +15,7 @@ public class ControleDeJogo {
         for (int i = 0; i < e.size(); i++) {
             e.get(i).autoDesenho();
         }
+        e.get(0).autoDesenho(); // redesenha o personagem para ele ficar por cima
     }
 
     public boolean processaTudo(ArrayList<Personagem> umaFase) {
@@ -70,7 +71,6 @@ public class ControleDeJogo {
                     }
                     break;
                 }
-
                 if (pIesimoPersonagem.isbTransponivel()) {
                     if (pIesimoPersonagem.isbKey()) {
                         System.out.print("\nInteracao de personagem: ");
@@ -98,7 +98,11 @@ public class ControleDeJogo {
                     } else if (pIesimoPersonagem.isbHeart()) {
                         umaFase.remove(pIesimoPersonagem);
                         hero.add_lifeQuant();
-                        System.out.format("Voce recebeu uma vida. Hearts | %d |\n",hero.lifeQuant());
+                        System.out.format("Voce recebeu uma vida. Hearts | %d |\n", hero.lifeQuant());
+                    } else if (pIesimoPersonagem.isbEnemy()) {
+                        hero.voltaAUltimaPosicao();
+                        hero.subtract_lifeQuant();
+                        System.out.format("Voce foi atingido por um inimigo. Hearts | %d |\n", hero.lifeQuant());
                     }
                 }
             }

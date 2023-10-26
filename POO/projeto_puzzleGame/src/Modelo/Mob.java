@@ -20,6 +20,7 @@ public class Mob extends Personagem implements Serializable {
 
     public Mob(String sNomeImagePNG) {
         super(sNomeImagePNG);
+        this.bTransponivel=true;
         bRight = true;
         this.isEnemy = true;
         timer = random.nextInt(10);
