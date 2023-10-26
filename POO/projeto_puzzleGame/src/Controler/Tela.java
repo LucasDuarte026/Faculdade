@@ -58,7 +58,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         System.out.println("|\n|\tMissao:\n-> Colete todas chaves para abrir cada porta, a ultima eh a saida da fase ");
         System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
 
-        this.contador_fase = 2;
+        this.contador_fase = 1;
 
         Desenho.setCenario(this);
         initComponents();
