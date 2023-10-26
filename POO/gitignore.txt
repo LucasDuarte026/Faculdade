@@ -1,2 +1,1 @@
-arquivos/
 nada/
