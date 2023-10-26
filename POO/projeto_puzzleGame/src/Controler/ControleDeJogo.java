@@ -22,7 +22,7 @@ public class ControleDeJogo {
     public int processaTudo(ArrayList<Personagem> umaFase) {
         Hero hero = (Hero) umaFase.get(0);
         if (hero.getLifeQuant() < 0) {
-            System.out.println("voce morreu. Nao tem mais vidas. Hearts | acabou | ");
+            System.out.println("\t->\tVoce morreu. Nao tem mais vidas. Hearts | acabou | ");
             return -1;
         }
         Personagem pIesimoPersonagem;
