@@ -143,7 +143,11 @@ public class ControleDeJogo {
             pIesimoPersonagem = umaFase.get(i);
             if (!pIesimoPersonagem.isbTransponivel()) {
                 if (pIesimoPersonagem.getPosicao().igual(p) && pIesimoPersonagem.isbPorta()) {
-                    {return true;}
+                    if (isEnemy) {
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
                 if (pIesimoPersonagem.getPosicao().igual(p)) {
                     if (isEnemy || characterCount == 0) {
