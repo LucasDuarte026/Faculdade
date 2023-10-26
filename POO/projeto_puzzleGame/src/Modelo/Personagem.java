@@ -24,7 +24,7 @@ public abstract class Personagem implements Serializable {
 
     protected boolean bTransponivel;
     /*Pode passar por cima?*/
-    protected boolean bMortal;
+    protected boolean bProject;
     /*Se encostar, morre?*/
     protected boolean isKey;
     /*para ser chave*/
@@ -40,14 +40,16 @@ public abstract class Personagem implements Serializable {
     /*para ser um tiro interagível*/
     protected boolean isEnemy;
     /*para ser a um inimigo*/
-    protected boolean isHeart;
+    boolean isHeart;
+    /*para ser a um coração*/
+    protected int characterCount;
 
-    /*para ser um coração de vida*/
-
+    /*contador do characterCount*/
+ /*para ser um coração de vida*/
     protected Personagem(String sNomeImagePNG) {
         this.pPosicao = new Posicao(1, 1);
         this.bTransponivel = true;
-        this.bMortal = false;
+        this.bProject = false;
         this.isKey = false;/*para ser chave*/
         this.isBox = false;/*para ser caixa*/
         this.isPorta = false;   //  Para ser porta
@@ -119,8 +121,13 @@ public abstract class Personagem implements Serializable {
     public boolean isbEnemy() {
         return this.isEnemy;
     }
+
     public boolean isbHeart() {
         return this.isHeart;
+    }
+
+    public boolean isbProject() {
+        return this.bProject;
     }
 
     public void setbTransponivel(boolean bTransponivel) {
@@ -133,6 +140,10 @@ public abstract class Personagem implements Serializable {
 
     public boolean isSpecialBlock() {
         return this.isSpecialBlock;
+    }
+
+    public int getCharacterCount() {
+        return this.characterCount;
     }
 
     public void autoDesenho() {

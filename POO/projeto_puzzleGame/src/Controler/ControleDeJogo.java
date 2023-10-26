@@ -3,6 +3,7 @@ package Controler;
 import Modelo.Personagem;
 import Modelo.Hero;
 import Modelo.Box;
+import Modelo.Enemy;
 import Modelo.Parede;
 import auxiliar.Posicao;
 import java.util.ArrayList;
@@ -18,8 +19,12 @@ public class ControleDeJogo {
         e.get(0).autoDesenho(); // redesenha o personagem para ele ficar por cima
     }
 
-    public boolean processaTudo(ArrayList<Personagem> umaFase) {
+    public int processaTudo(ArrayList<Personagem> umaFase) {
         Hero hero = (Hero) umaFase.get(0);
+        if (hero.getLifeQuant() < 0) {
+            System.out.println("voce morreu. Nao tem mais vidas. Hearts | acabou | ");
+            return -1;
+        }
         Personagem pIesimoPersonagem;
         for (int i = 1; i < umaFase.size(); i++) {
             pIesimoPersonagem = umaFase.get(i);
@@ -31,7 +36,7 @@ public class ControleDeJogo {
                         System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
                         System.out.println("Parabens, voce passou para a proxima fase!");
                         System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
-                        return true;
+                        return 1;
                     }
                     if (!pIesimoPersonagem.isbTransponivel()) {
                         if (hero.getKeyQuant() > 0) {
@@ -98,11 +103,16 @@ public class ControleDeJogo {
                     } else if (pIesimoPersonagem.isbHeart()) {
                         umaFase.remove(pIesimoPersonagem);
                         hero.add_lifeQuant();
-                        System.out.format("Voce recebeu uma vida. Hearts | %d |\n", hero.lifeQuant());
+                        System.out.format("Voce recebeu uma vida. Hearts | %d |\n", hero.getLifeQuant());
                     } else if (pIesimoPersonagem.isbEnemy()) {
                         hero.voltaAUltimaPosicao();
                         hero.subtract_lifeQuant();
-                        System.out.format("Voce foi atingido por um inimigo. Hearts | %d |\n", hero.lifeQuant());
+                        System.out.format("Voce foi atingido por um inimigo. Hearts | %d |\n", hero.getLifeQuant());
+                    } else if (pIesimoPersonagem.isbProject()) {
+                        umaFase.remove(pIesimoPersonagem);
+                        hero.voltaAUltimaPosicao();
+                        hero.subtract_lifeQuant();
+                        System.out.format("Voce foi atingido por um projetil. Hearts | %d |\n", hero.getLifeQuant());
                     }
                 }
             }
@@ -110,35 +120,45 @@ public class ControleDeJogo {
             for (int j = i + 1; j < umaFase.size(); j++) {
                 outro = umaFase.get(j);
                 if (outro.getPosicao().igual(pIesimoPersonagem.getPosicao())) {
-                    if (outro.isbTiro() && pIesimoPersonagem.isbEnemy()) {
-                        hero.add_opponent_killed();
-                        System.out.format(" -> Eliminou um oponente. Inimigos abatidos:  | %d | \n", hero.getEnemiesKilled());
-                        umaFase.remove(pIesimoPersonagem);
-                        umaFase.remove(outro);
+
+                    if (pIesimoPersonagem.isbEnemy()) {
+                        if (outro.isbTiro()) {
+                            hero.add_opponent_killed();
+                            System.out.format(" -> Eliminou um oponente. Inimigos abatidos:  | %d | \n", hero.getEnemiesKilled());
+                            umaFase.remove(pIesimoPersonagem);
+                            umaFase.remove(outro);
+                        }
 
                     }
                 }
             }
         }
-        return false;
+        return 0;
     }
 
     /*Retorna true se a posicao p é válida para Hero com relacao a todos os personagens no array*/
-    public boolean ehPosicaoValida(ArrayList<Personagem> umaFase, Posicao p) {
+    public boolean ehPosicaoValida(ArrayList<Personagem> umaFase, Posicao p, boolean isEnemy, int characterCount) {
         Personagem pIesimoPersonagem;
         for (int i = 1; i < umaFase.size(); i++) {
             pIesimoPersonagem = umaFase.get(i);
             if (!pIesimoPersonagem.isbTransponivel()) {
+                if (pIesimoPersonagem.getPosicao().igual(p) && pIesimoPersonagem.isbPorta()) {
+                    return false;
+                }
                 if (pIesimoPersonagem.getPosicao().igual(p)) {
-                    if (pIesimoPersonagem.isbPorta()) {
-                        return true;
-                    } else {
+                    if (isEnemy || characterCount == 0) {
                         return false;
                     }
-
                 }
             }
+            if (pIesimoPersonagem.isbTransponivel() && pIesimoPersonagem.getPosicao().igual(p)) {
+                if (isEnemy && pIesimoPersonagem.getCharacterCount() != characterCount) {
+                    return false;
+                }
+            }
+
         }
         return true;
+
     }
 }

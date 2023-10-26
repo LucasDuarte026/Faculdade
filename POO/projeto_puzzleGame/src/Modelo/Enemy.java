@@ -27,7 +27,7 @@ public class Enemy extends Personagem implements Serializable {
 
         if (this.timer % Consts.TIMER_FIRE == 0) {
             this.timer = 0;
-            Fogo f = new Fogo("fire.png", pointTo());
+            Project f = new Project("fire.png", pointTo());
             f.setPosicao(pPosicao.getLinha(), pPosicao.getColuna());
             Desenho.acessoATelaDoJogo().addPersonagem(f);
         }

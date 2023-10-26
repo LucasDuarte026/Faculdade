@@ -62,7 +62,7 @@ public class Hero extends Personagem implements Serializable {
 
     public boolean setPosicao(int linha, int coluna) {
         if (this.pPosicao.setPosicao(linha, coluna)) {
-            if (!Desenho.acessoATelaDoJogo().ehPosicaoValida(this.getPosicao())) {
+            if (!Desenho.acessoATelaDoJogo().ehPosicaoValida(this.getPosicao(),false,0)) {
                 this.voltaAUltimaPosicao();
             }
             return true;
@@ -72,7 +72,7 @@ public class Hero extends Personagem implements Serializable {
 
     /*TO-DO: este metodo pode ser interessante a todos os personagens que se movem*/
     private boolean validaPosicao() {
-        if (!Desenho.acessoATelaDoJogo().ehPosicaoValida(this.getPosicao())) {
+        if (!Desenho.acessoATelaDoJogo().ehPosicaoValida(this.getPosicao(),false,0)) {
             this.voltaAUltimaPosicao();
             return false;
         }
@@ -161,7 +161,7 @@ public class Hero extends Personagem implements Serializable {
         this.life_quant--;
     }
 
-    public int lifeQuant() {
+    public int getLifeQuant() {
         return this.life_quant;
     }
 }

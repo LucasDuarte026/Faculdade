@@ -16,13 +16,16 @@ public class Mob extends Personagem implements Serializable {
 
     private boolean bRight;
     private int timer;
+
     Random random = new Random();
 
-    public Mob(String sNomeImagePNG) {
+    public Mob(String sNomeImagePNG, int characterCount) {
         super(sNomeImagePNG);
-        this.bTransponivel=true;
+        this.bTransponivel = true;
         bRight = true;
         this.isEnemy = true;
+        this.characterCount = characterCount;
+
         timer = random.nextInt(10);
 
     }
@@ -34,7 +37,7 @@ public class Mob extends Personagem implements Serializable {
             } else {
                 this.setPosicao(pPosicao.getLinha(), pPosicao.getColuna() - 1);
             }
-            if (timer % 20*Consts.TIMER_WALK == 0) {
+            if (timer % 20 * Consts.TIMER_WALK == 0) {
                 bRight = !bRight;
             }
         }
@@ -44,13 +47,15 @@ public class Mob extends Personagem implements Serializable {
             timer = 0;
         }
     }
-      public void voltaAUltimaPosicao() {
+
+    public void voltaAUltimaPosicao() {
         this.pPosicao.volta();
-        
+
     }
+
     public boolean setPosicao(int linha, int coluna) {
         if (this.pPosicao.setPosicao(linha, coluna)) {
-            if (!Desenho.acessoATelaDoJogo().ehPosicaoValida(this.getPosicao())) {
+            if (!Desenho.acessoATelaDoJogo().ehPosicaoValida(this.getPosicao(), true,this.characterCount)) {
                 this.voltaAUltimaPosicao();
             }
             return true;

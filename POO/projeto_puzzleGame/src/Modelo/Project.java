@@ -5,13 +5,13 @@ import Controler.Tela;
 import java.awt.Graphics;
 import java.io.Serializable;
 
-public class Fogo extends Personagem implements Serializable {
+public class Project extends Personagem implements Serializable {
 
     private int decision;
 
-    public Fogo(String sNomeImagePNG, int whereToGO) {
+    public Project(String sNomeImagePNG, int whereToGO) {
         super(sNomeImagePNG);
-        this.bMortal = true;
+        this.bProject = true;
         this.decision = whereToGO;
     }
 

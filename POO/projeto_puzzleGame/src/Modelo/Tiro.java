@@ -11,7 +11,7 @@ public class Tiro extends Personagem implements Serializable {
 
     public Tiro(String sNomeImagePNG, int heroOrientation) {
         super(sNomeImagePNG);
-        this.bMortal = true;
+        this.bProject = true;
         this.decision = heroOrientation;
         this.isTiro=true;
     }
