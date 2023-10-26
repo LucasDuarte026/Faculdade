@@ -117,7 +117,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int quant_enemies = 5;
         int quant_mobs = 5;
         int quant_hearts = 2;
-        int quant_setas = 2;
+        int quant_setas = 10;
 
         int counter_paredes = 0;
         int counter_caixas = 0;
@@ -143,16 +143,16 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int[][] fase_1
                 = {
                     {0, 0, 0, 1, 2, 1, 1, 1, 9, 0, 0},
-                    {1, 1, 0, 1, 9, 1, 0, 1, 0, 1, 0},
+                    {1, 1,-4, 1, 9, 1, 0, 1, 0, 1, 0},
                     {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 8},
                     {6, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
                     {2, 1, 8, 1, 4, 1, 0, 1, 0, 1, 0},
                     {0, 1, 3, 0, 0, 1, 9, 0, 4, 1, 0},
                     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 0, 1, 0, 1, 0, 1, 8, 1, 0},
+                    {0, 1, 0, 1, -2, 1, 0, 1, 8, 1, 0},
                     {0, 1, 8, 1, 0, 1, 0, 1, 0, 1, 5},
-                    {0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0},
-                    {-5, 1,-1,1, 0, 8,-4, 9, 0, 1, 4}
+                    {0, 0, -3, 1, 0, 1, 0, 1, 1, 1, 0},
+                    {-5, 1,0,1, 0, 8,-1, 9, 0, 1, 4}
                 /*
                     index:
                     0 -> fundo preto
@@ -246,7 +246,29 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
                     case -1:
                         System.out.println("entrou");
-                        setas[counter_setas] = new Seta("seta_direita.png");
+                        setas[counter_setas] = new Seta("azul_direita.png");
+                        setas[counter_setas].setPosicao(i, j);
+                        this.addPersonagem(setas[counter_setas]);
+                        counter_setas++;
+                        break;
+                    case -2:
+                        System.out.println("entrou");
+                        setas[counter_setas] = new Seta("laranja_baixo.png");
+                        setas[counter_setas].setPosicao(i, j);
+                        this.addPersonagem(setas[counter_setas]);
+                        counter_setas++;
+                        break;
+                    case -3:
+                        System.out.println("entrou");
+                        setas[counter_setas] = new Seta("azul_esquerda.png");
+                        setas[counter_setas].setPosicao(i, j);
+                        this.addPersonagem(setas[counter_setas]);
+                        counter_setas++;
+                        break;
+                    case -4:
+                        System.out.println("entrou");
+                        setas[counter_setas] = new Seta("laranja"
+                                + "_cima.png");
                         setas[counter_setas].setPosicao(i, j);
                         this.addPersonagem(setas[counter_setas]);
                         counter_setas++;
