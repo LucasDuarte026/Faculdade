@@ -9,10 +9,11 @@ public class Tiro extends Personagem implements Serializable {
 
     private int decision;
 
-    public Tiro(String sNomeImagePNG, int heroInfo) {
+    public Tiro(String sNomeImagePNG, int heroOrientation) {
         super(sNomeImagePNG);
         this.bMortal = true;
-        this.decision = heroInfo;
+        this.decision = heroOrientation;
+        this.isTiro=true;
     }
 
     @Override
@@ -58,7 +59,4 @@ public class Tiro extends Personagem implements Serializable {
     3 -> esquerda
     4 -> cima
      */
-    public int decide_direction(int heroInfo) {
-        return heroInfo;
-    }
 }

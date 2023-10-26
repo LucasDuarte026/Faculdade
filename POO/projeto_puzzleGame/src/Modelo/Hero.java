@@ -16,16 +16,20 @@ import javax.swing.JPanel;
 
 public class Hero extends Personagem implements Serializable {
 
+    protected int life_quant = 0;
     protected int quant_keys = 0;
     protected int opened_doors = 0;
+    protected int opponents_killed = 0;
     protected int doorMissionQuant;
+    protected int opponentMissionQuant;
     private int iContaIntervalos;
     private int orientation;
 
-    public Hero(String sNomeImagePNG, int doorMissionQuant) {
+    public Hero(String sNomeImagePNG, int doorMissionQuant, int opponentMissionQuant) {
         super(sNomeImagePNG);
         this.doorMissionQuant = doorMissionQuant;
-        iContaIntervalos = 0;
+        this.opponentMissionQuant = opponentMissionQuant;
+
         orientation = 2;    //  Começa atirando para baixo
 
     }
@@ -33,21 +37,18 @@ public class Hero extends Personagem implements Serializable {
     public void autoDesenho() {
         super.autoDesenho();
 
-        this.iContaIntervalos++;
-
-        
 
     }
 
-    public void gunFire(){
-            Tiro f = new Tiro("fire.png", orientation);
+    public void gunFire() {
+        Tiro f = new Tiro("fire.png", orientation);
 //            f.decide_direction(orientation);
-            f.setPosicao(pPosicao.getLinha(), pPosicao.getColuna());
-            Desenho.acessoATelaDoJogo().addPersonagem(f);
+        f.setPosicao(pPosicao.getLinha(), pPosicao.getColuna());
+        Desenho.acessoATelaDoJogo().addPersonagem(f);
     }
 
     public boolean faseFinalizada() {
-        if (opened_doors >= this.doorMissionQuant) {
+        if (opened_doors >= this.doorMissionQuant && opponents_killed >= this.opponentMissionQuant) {
             return true;
         } else {
             return false;
@@ -56,9 +57,7 @@ public class Hero extends Personagem implements Serializable {
 
     public void voltaAUltimaPosicao() {
         this.pPosicao.volta();
-        if (doorMissionQuant > 2) {
 
-        }
     }
 
     public boolean setPosicao(int linha, int coluna) {
@@ -146,4 +145,23 @@ public class Hero extends Personagem implements Serializable {
         this.opened_doors++;
     }
 
+    public int getEnemiesKilled() {
+        return this.opponents_killed;
+    }
+
+    public void add_opponent_killed() {
+        this.opponents_killed++;
+    }
+
+    public void add_lifeQuant() {
+        this.life_quant++;
+    }
+
+    public void subtract_lifeQuant() {
+        this.life_quant--;
+    }
+
+    public int lifeQuant() {
+        return this.life_quant;
+    }
 }

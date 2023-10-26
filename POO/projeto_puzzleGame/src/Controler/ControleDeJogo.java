@@ -25,7 +25,7 @@ public class ControleDeJogo {
 
             if (hero.getPosicao().igual(pIesimoPersonagem.getPosicao())) {
 
-                if (pIesimoPersonagem.isbPorta()) {                    
+                if (pIesimoPersonagem.isbPorta()) {
                     if (hero.faseFinalizada()) {
                         System.out.println("-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ");
                         System.out.println("Parabens, voce passou para a proxima fase!");
@@ -95,30 +95,46 @@ public class ControleDeJogo {
                         }
 
                         FlagPassouBotao = true;
+                    } else if (pIesimoPersonagem.isbHeart()) {
+                        umaFase.remove(pIesimoPersonagem);
+                        hero.add_lifeQuant();
+                        System.out.format("Voce recebeu uma vida. Hearts | %d |\n",hero.lifeQuant());
                     }
                 }
             }
+            Personagem outro;
+            for (int j = i + 1; j < umaFase.size(); j++) {
+                outro = umaFase.get(j);
+                if (outro.getPosicao().igual(pIesimoPersonagem.getPosicao())) {
+                    if (outro.isbTiro() && pIesimoPersonagem.isbEnemy()) {
+                        hero.add_opponent_killed();
+                        System.out.format(" -> Eliminou um oponente. Inimigos abatidos:  | %d | \n", hero.getEnemiesKilled());
+                        umaFase.remove(pIesimoPersonagem);
+                        umaFase.remove(outro);
 
+                    }
+                }
+            }
         }
         return false;
     }
 
     /*Retorna true se a posicao p é válida para Hero com relacao a todos os personagens no array*/
-        public boolean ehPosicaoValida(ArrayList<Personagem> umaFase, Posicao p) {
-            Personagem pIesimoPersonagem;
-            for (int i = 1; i < umaFase.size(); i++) {
-                pIesimoPersonagem = umaFase.get(i);
-                if (!pIesimoPersonagem.isbTransponivel()) {
-                    if (pIesimoPersonagem.getPosicao().igual(p)) {
-                        if (pIesimoPersonagem.isbPorta()) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-
+    public boolean ehPosicaoValida(ArrayList<Personagem> umaFase, Posicao p) {
+        Personagem pIesimoPersonagem;
+        for (int i = 1; i < umaFase.size(); i++) {
+            pIesimoPersonagem = umaFase.get(i);
+            if (!pIesimoPersonagem.isbTransponivel()) {
+                if (pIesimoPersonagem.getPosicao().igual(p)) {
+                    if (pIesimoPersonagem.isbPorta()) {
+                        return true;
+                    } else {
+                        return false;
                     }
+
                 }
             }
-            return true;
         }
+        return true;
+    }
 }

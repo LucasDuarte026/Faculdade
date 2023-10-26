@@ -7,6 +7,9 @@ import Modelo.Parede;
 import Modelo.Key;
 import Modelo.Box;
 import Modelo.Botao;
+import Modelo.Heart;
+import Modelo.Mob;
+import Modelo.Seta;
 import Modelo.Enemy;
 import Modelo.Porta;
 import Modelo.BichinhoVaiVemHorizontal;
@@ -97,10 +100,12 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
         faseAtual = new ArrayList<Personagem>();
         int fase1_door_quant = 3;
+        int fase1_kiils_quant = 9;
+
         flagSpecialBlock = false;
 
         /*Cria o heroi primeiro que todo mundo*/
-        hero = new Hero("olha_baixo.png", fase1_door_quant);
+        hero = new Hero("olha_baixo.png", fase1_door_quant, fase1_kiils_quant);;
         hero.setPosicao(0, 0);
         this.addPersonagem(hero);
 
@@ -109,7 +114,10 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int quant_portas = 3;
         int quant_chaves = 4;
         int quant_botoes = 3;
-        int quant_enemies = 3;
+        int quant_enemies = 5;
+        int quant_mobs = 5;
+        int quant_hearts = 2;
+        int quant_setas = 2;
 
         int counter_paredes = 0;
         int counter_caixas = 0;
@@ -117,6 +125,9 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int counter_chaves = 0;
         int counter_botoes = 0;
         int counter_enemies = 0;
+        int counter_mobs = 0;
+        int counter_hearts = 0;
+        int counter_setas = 0;
 
         /*  criando o vetor de objetos*/
         Parede bricks[] = new Parede[quant_paredes];
@@ -125,24 +136,23 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         Key keys[] = new Key[quant_chaves];
         Botao botoes[] = new Botao[quant_botoes];
         Enemy enemies[] = new Enemy[quant_enemies];
+        Mob mobs[] = new Mob[quant_mobs];
+        Heart cores[] = new Heart[quant_hearts];
+        Seta setas[] = new Seta[quant_setas];
 
         int[][] fase_1
                 = {
-                    {0, 0, 0, 1, 2, 1, 1, 1, 0, 0, 0},
-                    {1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+                    {0, 0, 0, 1, 2, 1, 1, 1, 9, 0, 0},
+                    {1, 1, 0, 1, 9, 1, 0, 1, 0, 1, 0},
+                    {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 8},
                     {6, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 3, 0, 4, 1, 0, 0, 4, 1, 0},
+                    {2, 1, 8, 1, 4, 1, 0, 1, 0, 1, 0},
+                    {0, 1, 3, 0, 0, 1, 9, 0, 4, 1, 0},
                     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 5},
-                    {0, 0, 8, 1, 8, 1, 0, 1, 1, 1, 0},
-                    {0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 4}
-
-                };
-        for (int i = 0; i < 11; i++) {
-            for (int j = 0; j < 11; j++) {
+                    {0, 1, 0, 1, 0, 1, 0, 1, 8, 1, 0},
+                    {0, 1, 8, 1, 0, 1, 0, 1, 0, 1, 5},
+                    {0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0},
+                    {-5, 1,-1,1, 0, 8,-4, 9, 0, 1, 4}
                 /*
                     index:
                     0 -> fundo preto
@@ -153,10 +163,192 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                     5 -> botão
                     6 -> parede especial
                     7 -> porta saida
-                    8 -> inimigo
-                    9
+                    8 -> Enemy inimigo tiro
+                    9 -> Mob inimigo andando
+                   -1 -> seta direita        
+                   -2 -> seta baixo
+                   -3 -> seta esquerda
+                   -4 -> seta cima
+                   -5 -> coração
+                        
+                 */
+ /*             Direções
+                   1 -> direita
+                   2 -> baixo
+                   3 -> esquerda
+                   4 -> cima
+                 */
+                };
+        for (int i = 0; i < 11; i++) {
+            for (int j = 0; j < 11; j++) {
+
+                if (fase_1[i][j] == 6) {
+                    this.flagSpecialBlock = true;
+                    fase_1[i][j] = 1;
+                }
+                switch (fase_1[i][j]) {
+
+                    case 1:
+
+                        bricks[counter_paredes] = new Parede("bricks.png");
+                        bricks[counter_paredes].setPosicao(i, j);
+                        if (this.flagSpecialBlock) {
+                            bricks[counter_paredes].setSpecialBlock(true);
+                            this.flagSpecialBlock = false;
+                        }
+                        this.addPersonagem(bricks[counter_paredes]);
+                        counter_paredes++;
+                        break;
+
+                    case 2:
+
+                        keys[counter_chaves] = new Key("key1.png");
+                        keys[counter_chaves].setPosicao(i, j);
+                        this.addPersonagem(keys[counter_chaves]);
+                        counter_chaves++;
+                        break;
+
+                    case 3:
+
+                        boxes[counter_caixas] = new Box("box.png");
+                        boxes[counter_caixas].setPosicao(i, j);
+                        this.addPersonagem(boxes[counter_caixas]);
+                        break;
+                    case 4:
+
+                        portas[counter_portas] = new Porta("porta_fechada.png");
+                        portas[counter_portas].setPosicao(i, j);
+                        this.addPersonagem(portas[counter_portas]);
+                        counter_portas++;
+                        break;
+
+                    case 5:
+
+                        botoes[counter_botoes] = new Botao("botao_vermelho.png");
+                        botoes[counter_botoes].setPosicao(i, j);
+                        this.addPersonagem(botoes[counter_botoes]);
+                        counter_botoes++;
+                        break;
+                    case 8:
+
+                        enemies[counter_enemies] = new Enemy("morty.png");
+                        enemies[counter_enemies].setPosicao(i, j);
+                        this.addPersonagem(enemies[counter_enemies]);
+                        counter_enemies++;
+                        break;
+
+                    case 9:
+                        mobs[counter_mobs] = new Mob("skoot.png");
+                        mobs[counter_mobs].setPosicao(i, j);
+                        this.addPersonagem(mobs[counter_mobs]);
+                        counter_mobs++;
+                        break;
+
+                    case -1:
+                        System.out.println("entrou");
+                        setas[counter_setas] = new Seta("seta_direita.png");
+                        setas[counter_setas].setPosicao(i, j);
+                        this.addPersonagem(setas[counter_setas]);
+                        counter_setas++;
+                        break;
+
+                    case -5:
+                        cores[counter_hearts] = new Heart("heart.png");
+                        cores[counter_hearts].setPosicao(i, j);
+                        this.addPersonagem(cores[counter_hearts]);
+                        counter_hearts++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    public void init_fase2() {
+
+        System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+        System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
+        System.out.println("| - Aperte R caso queira resetar ");
+        System.out.println("| - Aperte S caso queira salvar ");
+
+        System.out.println("|\n|\tFase1:\n-> Colete 3 chaves para abrir cada porta, a ultima eh a saida da fase ");
+
+        System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
+
+        /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
+        faseAtual = new ArrayList<Personagem>();
+        int fase1_door_quant = 3;
+        int fase1_kiils_quant = 9;
+
+        flagSpecialBlock = false;
+
+        /*Cria o heroi primeiro que todo mundo*/
+        hero = new Hero("olha_baixo.png", fase1_door_quant, fase1_kiils_quant);
+        hero.setPosicao(0, 0);
+        this.addPersonagem(hero);
+
+        int quant_paredes = 100;
+        int quant_caixas = 2;
+        int quant_portas = 3;
+        int quant_chaves = 4;
+        int quant_botoes = 3;
+        int quant_enemies = 5;
+        int quant_mobs = 5;
+        int quant_hearts = 2;
+
+        int counter_paredes = 0;
+        int counter_caixas = 0;
+        int counter_portas = 0;
+        int counter_chaves = 0;
+        int counter_botoes = 0;
+        int counter_enemies = 0;
+        int counter_mobs = 0;
+        int counter_hearts = 0;
+
+
+        /*  criando o vetor de objetos*/
+        Parede bricks[] = new Parede[quant_paredes];
+        Box boxes[] = new Box[quant_caixas];
+        Porta portas[] = new Porta[quant_portas];
+        Key keys[] = new Key[quant_chaves];
+        Botao botoes[] = new Botao[quant_botoes];
+        Enemy enemies[] = new Enemy[quant_enemies];
+        Mob mobs[] = new Mob[quant_mobs];
+        Heart cores[] = new Heart[quant_hearts];
+
+        int[][] fase_1
+                = {
+                    {0, 0, 0, 1, 2, 1, 1, 1, 9, 0, 0},
+                    {1, 1, 0, 1, 9, 1, 0, 1, 0, 1, 0},
+                    {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+                    {6, 1, 8, 1, 0, 1, 0, 1, 0, 1, 0},
+                    {2, 1, 8, 1, 0, 1, 0, 1, 0, 1, 0},
+                    {0, 1, 3, 0, 4, 1, 9, 0, 4, 1, 0},
+                    {0, 1, 8, 1, -5, 1, 0, 1, 0, 1, 0},
+                    {0, 1, 8, 1, 0, 1, 0, 1, 0, 1, 0},
+                    {0, 1, 8, 1, 0, 1, 0, 1, 0, 1, 5},
+                    {0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0},
+                    {-5, 1, 0, 1, 0, 0, 0, 9, 0, 1, 4}
+                /*
+                    index:
+                    0 -> fundo preto
+                    1 -> parede
+                    2 -> chave
+                    3 -> box
+                    4 -> porta
+                    5 -> botão
+                    6 -> parede especial
+                    7 -> porta saida
+                    8 -> inimigo tiro
+                    9 -> inimigo andando
+                   -1 -> coração
     
                  */
+                };
+        for (int i = 0; i < 11; i++) {
+            for (int j = 0; j < 11; j++) {
+
                 if (fase_1[i][j] == 6) {
                     this.flagSpecialBlock = true;
                     fase_1[i][j] = 1;
@@ -211,6 +403,18 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                         counter_enemies++;
                         break;
 
+                    case 9:
+                        mobs[counter_mobs] = new Mob("skoot.png");
+                        mobs[counter_mobs].setPosicao(i, j);
+                        this.addPersonagem(mobs[counter_mobs]);
+                        counter_mobs++;
+                        break;
+                    case -5:
+                        cores[counter_hearts] = new Heart("heart.png");
+                        cores[counter_hearts].setPosicao(i, j);
+                        this.addPersonagem(cores[counter_hearts]);
+                        counter_hearts++;
+                        break;
                     default:
                         break;
                 }
@@ -218,128 +422,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         }
     }
 
-    public void init_fase2() {
-
-        System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
-        System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
-        System.out.println("|\n|\tFase1:\n-> Colete 3 chaves para abrir cada porta, a ultima eh a saida da fase ");
-
-        System.out.println("| - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
-
-        /* Os valores para cada um são uma estimativa por cima de quantos onjetos deste terão na fase*/
-        faseAtual = new ArrayList<Personagem>();
-        int fase1_door_quant = 4;
-        flagSpecialBlock = false;
-
-        /*Cria o heroi primeiro que todo mundo*/
-        hero = new Hero("olha_baixo.png", fase1_door_quant);
-        hero.setPosicao(0, 0);
-        this.addPersonagem(hero);
-
-        int quant_paredes = 100;
-        int quant_caixas = 2;
-        int quant_portas = 4;
-        int quant_chaves = 4;
-        int quant_botoes = 3;
-
-        int counter_paredes = 0;
-        int counter_caixas = 0;
-        int counter_portas = 0;
-        int counter_chaves = 0;
-        int counter_botoes = 0;
-
-
-        /*  criando o vetor de objetos*/
-        Parede bricks[] = new Parede[quant_paredes];
-        Box boxes[] = new Box[quant_caixas];
-        Porta portas[] = new Porta[quant_portas];
-        Key keys[] = new Key[quant_chaves];
-        Botao botoes[] = new Botao[quant_botoes];
-        int[][] fase_1
-                = {
-                    {0, 0, 0, 1, 2, 1, 1, 1, 0, 0, 0},
-                    {1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {6, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 3, 0, 4, 1, 0, 0, 4, 1, 0},
-                    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-                    {0, 1, 3, 1, 0, 1, 0, 1, 0, 1, 5},
-                    {0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0},
-                    {0, 0, 3, 1, 0, 0, 0, 0, 0, 1, 4}
-
-                };
-        for (int i = 0; i < 11; i++) {
-            for (int j = 0; j < 11; j++) {
-                /*
-                    index:
-                    0 -> fundo preto
-                    1 -> parede
-                    2 -> chave
-                    3 -> box
-                    4 -> porta
-                    5 -> botão
-                    6 -> parede especial
-                    7 -> porta saida
-                    8 ->
-                    9
-    
-                 */
-                if (fase_1[i][j] == 6) {
-                    this.flagSpecialBlock = true;
-                    fase_1[i][j] = 1;
-                }
-                switch (fase_1[i][j]) {
-
-                    case 1:
-
-                        bricks[counter_paredes] = new Parede("bricks.png");
-                        bricks[counter_paredes].setPosicao(i, j);
-                        if (this.flagSpecialBlock) {
-                            bricks[counter_paredes].setSpecialBlock(true);
-                            this.flagSpecialBlock = false;
-                        }
-                        this.addPersonagem(bricks[counter_paredes]);
-                        counter_paredes++;
-                        break;
-                    case 2:
-
-                        keys[counter_chaves] = new Key("key1.png");
-                        keys[counter_chaves].setPosicao(i, j);
-                        this.addPersonagem(keys[counter_chaves]);
-                        counter_chaves++;
-                        break;
-
-                    case 3:
-
-                        boxes[counter_caixas] = new Box("box.png");
-                        boxes[counter_caixas].setPosicao(i, j);
-                        this.addPersonagem(boxes[counter_caixas]);
-                        break;
-                    case 4:
-
-                        portas[counter_portas] = new Porta("porta_fechada.png");
-                        portas[counter_portas].setPosicao(i, j);
-                        this.addPersonagem(portas[counter_portas]);
-                        counter_portas++;
-                        break;
-
-                    case 5:
-
-                        botoes[counter_botoes] = new Botao("botao_vermelho.png");
-                        botoes[counter_botoes].setPosicao(i, j);
-                        this.addPersonagem(botoes[counter_botoes]);
-                        counter_botoes++;
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-
+    // ideia inicial para instalar as paredes
+    /*
     public void init_paredes_fase1_old() {
         Parede bricks[] = new Parede[121];
         int[][] fase_1
@@ -367,8 +451,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                 }
             }
         }
-    }
-
+    } 
+     */
     public boolean ehPosicaoValida(Posicao p) {
         return cj.ehPosicaoValida(this.faseAtual, p);
     }

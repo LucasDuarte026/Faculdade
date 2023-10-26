@@ -35,18 +35,24 @@ public abstract class Personagem implements Serializable {
     protected boolean isBotao;
     /*para ser botão*/
     protected boolean isSpecialBlock;
+    /*para ser passagem especial*/
+    protected boolean isTiro;
+    /*para ser um tiro interagível*/
+    protected boolean isEnemy;
+    /*para ser a um inimigo*/
+    protected boolean isHeart;
 
-    /*para ser a parede passável*/
+    /*para ser um coração de vida*/
+
     protected Personagem(String sNomeImagePNG) {
         this.pPosicao = new Posicao(1, 1);
         this.bTransponivel = true;
         this.bMortal = false;
         this.isKey = false;/*para ser chave*/
         this.isBox = false;/*para ser caixa*/
-        this.isPorta = false;
-        /*Para ver se é porta*/
-        this.isBotao = false;
-        /*Para ver se é porta*/
+        this.isPorta = false;   //  Para ser porta
+        this.isBotao = false;   //  Para ser botao
+        this.isHeart = false;   //  Para ser coração
 
         try {
             iImage = new ImageIcon(new java.io.File(".").getCanonicalPath() + Consts.PATH + sNomeImagePNG);
@@ -104,6 +110,17 @@ public abstract class Personagem implements Serializable {
 
     public boolean isbBotao() {
         return this.isBotao;
+    }
+
+    public boolean isbTiro() {
+        return this.isTiro;
+    }
+
+    public boolean isbEnemy() {
+        return this.isEnemy;
+    }
+    public boolean isbHeart() {
+        return this.isHeart;
     }
 
     public void setbTransponivel(boolean bTransponivel) {
