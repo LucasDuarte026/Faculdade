@@ -13,7 +13,7 @@ public class Tiro extends Personagem implements Serializable {
         super(sNomeImagePNG);
         this.bProject = true;
         this.decision = heroOrientation;
-        this.isTiro=true;
+        this.isTiro = true;
     }
 
     @Override
@@ -28,23 +28,34 @@ public class Tiro extends Personagem implements Serializable {
          */
         switch (decision) {
             case 1:
+                this.mudar_imagem("tiro_right.png");
+
                 if (!this.moveRight()) {
                     Desenho.acessoATelaDoJogo().removePersonagem(this);
                 }
                 break;
             case 2:
+                this.mudar_imagem("tiro_down.png");
+
                 if (!this.moveDown()) {
                     Desenho.acessoATelaDoJogo().removePersonagem(this);
+
                 }
                 break;
             case 3:
+                this.mudar_imagem("tiro_left.png");
+
                 if (!this.moveLeft()) {
                     Desenho.acessoATelaDoJogo().removePersonagem(this);
+
                 }
                 break;
             case 4:
+                this.mudar_imagem("tiro_up.png");
+
                 if (!this.moveUp()) {
                     Desenho.acessoATelaDoJogo().removePersonagem(this);
+
                 }
                 break;
             default:

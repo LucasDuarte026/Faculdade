@@ -41,7 +41,7 @@ public class Hero extends Personagem implements Serializable {
     }
 
     public void gunFire() {
-        Tiro f = new Tiro("fire.png", orientation);
+        Tiro f = new Tiro("tiro_up.png", orientation);
 //            f.decide_direction(orientation);
         f.setPosicao(pPosicao.getLinha(), pPosicao.getColuna());
         Desenho.acessoATelaDoJogo().addPersonagem(f);

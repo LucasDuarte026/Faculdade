@@ -20,21 +20,29 @@ public class Project extends Personagem implements Serializable {
         super.autoDesenho();
         switch (decision) {
             case 1:
+                this.mudar_imagem("fire_right.png");
+
                 if (!this.moveRight()) {
                     Desenho.acessoATelaDoJogo().removePersonagem(this);
                 }
                 break;
             case 2:
+                this.mudar_imagem("fire_down.png");
+
                 if (!this.moveDown()) {
                     Desenho.acessoATelaDoJogo().removePersonagem(this);
                 }
                 break;
             case 3:
+                this.mudar_imagem("fire_left.png");
+
                 if (!this.moveLeft()) {
                     Desenho.acessoATelaDoJogo().removePersonagem(this);
                 }
                 break;
             case 4:
+                this.mudar_imagem("fire_up.png");
+
                 if (!this.moveUp()) {
                     Desenho.acessoATelaDoJogo().removePersonagem(this);
                 }
