@@ -54,7 +54,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
         System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
         System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
-        System.out.println("| - Aperte R caso queira resetar ");
+        System.out.println("| - Aperte R caso queira resetar a fase");
+        System.out.println("| - Aperte I caso queira resetar o jogo todo (ir para a fase 1) ");
         System.out.println("| - Aperte S caso queira salvar ");
         System.out.println("|\n|\tMissao:\n-> Colete todas chaves para abrir cada porta, a ultima eh a saida da fase ");
         System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
@@ -97,7 +98,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
             System.out.println("Erro em salvar");
             return true;
         }
-        System.out.println("Jogo salvo na fase: " + (this.contador_fase - 1));
+        System.out.println("Jogo salvo na fase: " + (this.contador_fase ));
         return true;
 
     }
@@ -125,7 +126,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
     public void resetaFase() {
         System.out.println("\\ - - -   - - -   fase resetada   - - -   - - -   - - -   - - -  ");
-        switch (contador_fase - 1) {
+        switch (contador_fase) {
             case 1:
                 init_fase1();
                 break;
@@ -146,28 +147,29 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
     public void passaDeFase() {
         System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
-
+        contador_fase++;
         switch (contador_fase) {
             case 1:
                 init_fase1();
-                contador_fase++;
                 break;
             case 2:
                 init_fase2();
-                contador_fase++;
 
                 break;
             case 3:
                 init_fase3();
-                contador_fase++;
 
                 break;
             case 4:
                 init_fase4();
-                contador_fase++;
                 break;
 
         }
+    }
+
+    public void initGame() {
+        this.contador_fase = 1;
+        this.resetaFase();
     }
 
     public void endGame() {
@@ -195,6 +197,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         flagSpecialBlock = false;
 
         /*Cria o heroi primeiro que todo mundo*/
+        Personagem hero;
         hero = new Hero("olha_baixo.png", fase1_door_quant, fase1_kiils_quant);;
         hero.setPosicao(1, 1);
         this.addPersonagem(hero);
@@ -405,6 +408,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         flagSpecialBlock = false;
 
         /*Cria o heroi primeiro que todo mundo*/
+        Personagem hero;
         hero = new Hero("olha_baixo.png", fase2_door_quant, fase2_kiils_quant);;
         hero.setPosicao(3, 9);
         this.addPersonagem(hero);
@@ -598,6 +602,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         flagSpecialBlock = false;
 
         /*Cria o heroi primeiro que todo mundo*/
+        Personagem hero;
         hero = new Hero("olha_baixo.png", fase3_door_quant, fase3_kiils_quant);;
         hero.setPosicao(4, 10);
         this.addPersonagem(hero);
@@ -791,6 +796,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         flagSpecialBlock = false;
 
         /*Cria o heroi primeiro que todo mundo*/
+        Personagem hero;
         hero = new Hero("olha_baixo.png", fase4_door_quant, fase4_kiils_quant);;
         hero.setPosicao(4, 1);
         this.addPersonagem(hero);
@@ -1040,6 +1046,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     }
 
     public void keyPressed(KeyEvent e) {
+        Hero hero = (Hero) this.faseAtual.get(0);
+
         if (e.getKeyCode() == KeyEvent.VK_C) {
             this.faseAtual.clear();
         } else if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -1056,6 +1064,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
             resetaFase();
         } else if (e.getKeyCode() == KeyEvent.VK_S) {
             salvaFase(this.faseAtual);
+        } else if (e.getKeyCode() == KeyEvent.VK_I) {
+            initGame();
         }
 
         this.setTitle("-> Cell: " + (hero.getPosicao().getColuna()) + ", "
@@ -1069,10 +1079,12 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         int x = e.getX();
         int y = e.getY();
 
+        Hero hero = (Hero) this.faseAtual.get(0);
+
         this.setTitle("X: " + x + ", Y: " + y
                 + " -> Cell: " + (y / Consts.CELL_SIDE) + ", " + (x / Consts.CELL_SIDE));
 
-        this.hero.getPosicao().setPosicao(y / Consts.CELL_SIDE, x / Consts.CELL_SIDE);
+        hero.getPosicao().setPosicao(y / Consts.CELL_SIDE, x / Consts.CELL_SIDE);
 
         repaint();
     }
