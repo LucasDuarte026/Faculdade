@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -42,7 +43,6 @@ import javax.swing.JButton;
 
 public class Tela extends javax.swing.JFrame implements MouseListener, KeyListener {
 
-    private Hero hero;
     private ArrayList<Personagem> faseAtual;
     private ControleDeJogo cj = new ControleDeJogo();
     private Graphics g2;
@@ -50,7 +50,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     private int contador_fase;
     private boolean endGame;
 
-    public Tela() {
+    public Tela() throws FileNotFoundException {
 
         System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
         System.out.println("| Jogo desenvolvido por Joao Victor & Lucas Duarte ");
@@ -72,8 +72,55 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         this.setSize(Consts.RES * Consts.CELL_SIDE + getInsets().left + getInsets().right,
                 Consts.RES * Consts.CELL_SIDE + getInsets().top + getInsets().bottom);
 
-//        init_fase1();
-        this.passaDeFase();
+        if (!carregaFase()) {
+            this.passaDeFase();
+        }
+//        this.passaDeFase();
+
+    }
+
+    public boolean salvaFase(ArrayList<Personagem> fase) {
+        FileOutputStream fileOut;
+        try {
+            fileOut = new FileOutputStream("saveGame.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(fase);
+            out.close();
+            fileOut.close();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro em salvar");
+            return false;
+        } catch (IOException ex) {
+            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro em salvar");
+            return true;
+        }
+        System.out.println("Jogo salvo na fase: " + (this.contador_fase - 1));
+        return true;
+
+    }
+
+    public boolean carregaFase() throws FileNotFoundException {
+        ArrayList<Personagem> present_fase;
+        present_fase = new ArrayList<Personagem>();
+        FileInputStream fileIn = new FileInputStream("saveGame.ser");
+        ObjectInputStream in;
+        try {
+            in = new ObjectInputStream(fileIn);
+            present_fase = (ArrayList< Personagem>) in.readObject();
+            in.close();
+            fileIn.close();
+
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("erro em carregar o jogo");
+
+        }
+        this.faseAtual = present_fase;
+        return true;
+
     }
 
     public void resetaFase() {
@@ -135,7 +182,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         }
     }
 
-    public void init_fase1(){
+    public void init_fase1() {
 
         System.out.println("/ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
         System.out.println("\t\t|\n\n Fase 1 |");
@@ -199,7 +246,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                     {-5, 1, 0, 1, 0, 8, 0, 9, 0, 1, 4}
                      */
                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 0,-5, 0, 1, 2, 1, 1, 1, 9, 0, 0, 1},
+                    {1, 0, -5, 0, 1, 2, 1, 1, 1, 9, 0, 0, 1},
                     {1, 1, 1, 0, 1, 9, 1, 0, 1, 0, 1, 0, 1},
                     {1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 8, 1},
                     {1, 6, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
@@ -925,7 +972,6 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
 
     }
 
-  
     public boolean ehPosicaoValida(Posicao p, boolean isEnemy, int characterCount) {
         return cj.ehPosicaoValida(this.faseAtual, p, isEnemy, characterCount);
     }
@@ -1008,6 +1054,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
             hero.gunFire();
         } else if (e.getKeyCode() == KeyEvent.VK_R) {
             resetaFase();
+        } else if (e.getKeyCode() == KeyEvent.VK_S) {
+            salvaFase(this.faseAtual);
         }
 
         this.setTitle("-> Cell: " + (hero.getPosicao().getColuna()) + ", "
