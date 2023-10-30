@@ -102,7 +102,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         return true;
 
     }
-
+    @SuppressWarnings("unchecked")
     public boolean carregaFase() throws FileNotFoundException {
         ArrayList<Personagem> present_fase;
         present_fase = new ArrayList<Personagem>();
