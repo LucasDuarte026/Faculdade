@@ -10,6 +10,7 @@ import Modelo.Botao;
 import Modelo.Heart;
 import Modelo.Mob;
 import Modelo.Seta;
+import Modelo.SalvaDado;
 import Modelo.Enemy;
 import Modelo.Porta;
 import Modelo.BichinhoVaiVemHorizontal;
@@ -60,7 +61,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         System.out.println("|\n|\tMissao:\n-> Colete todas chaves para abrir cada porta, a ultima eh a saida da fase ");
         System.out.println("\\ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -  ");
         endGame = false;
-        this.contador_fase = 1;
+        this.contador_fase = 0;
 
         Desenho.setCenario(this);
         initComponents();
@@ -83,11 +84,15 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     public boolean salvaFase(ArrayList<Personagem> fase) {
         FileOutputStream fileOut;
         try {
-            fileOut = new FileOutputStream("saveGame.ser");
+            SalvaDado saveGame = new SalvaDado(this.faseAtual, this.contador_fase);
+        File saveGameFile = new File("saveGame.ser");
+
+            fileOut = new FileOutputStream(saveGameFile);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(fase);
+            out.writeObject(saveGame);
             out.close();
             fileOut.close();
+            System.out.println("Jogo salvo na fase: " + (this.contador_fase));
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
@@ -98,35 +103,53 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
             System.out.println("Erro em salvar");
             return true;
         }
-        System.out.println("Jogo salvo na fase: " + (this.contador_fase ));
         return true;
 
     }
+
     @SuppressWarnings("unchecked")
-    public boolean carregaFase() throws FileNotFoundException {
-        ArrayList<Personagem> present_fase;
-        present_fase = new ArrayList<Personagem>();
-        FileInputStream fileIn = new FileInputStream("saveGame.ser");
-        ObjectInputStream in;
-        try {
-            in = new ObjectInputStream(fileIn);
-            present_fase = (ArrayList< Personagem>) in.readObject();
-            in.close();
-            fileIn.close();
+    public boolean carregaFase() {
+        SalvaDado saveGame;
+        saveGame = null;
 
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("erro em carregar o jogo");
+        File saveGameFile = new File("saveGame.ser");
 
+        if (saveGameFile.exists()) {
+            try {
+                FileInputStream fileIn = new FileInputStream(saveGameFile);
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                saveGame = (SalvaDado) in.readObject();
+                in.close();
+                fileIn.close();
+
+                this.faseAtual = saveGame.getPersonagens();
+                this.contador_fase = saveGame.getValorNumerico();
+                System.out.println("Jogo Salvo encontrado! Fase carregada: " + this.contador_fase);
+
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+
+                System.out.println("Erro ao carregar o jogo");
+            }
+
+            return true;
+        } else {
+            try {
+                saveGameFile.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Erro ao criar o arquivo de salvamento");
+            }
+            return false;
         }
-        this.faseAtual = present_fase;
-        return true;
-
     }
 
     public void resetaFase() {
         System.out.println("\\ - - -   - - -   fase resetada   - - -   - - -   - - -   - - -  ");
         switch (contador_fase) {
+            case 0:
+                this.passaDeFase();
+                break;
             case 1:
                 init_fase1();
                 break;

@@ -17,4 +17,6 @@ Logo, funcionalidades estão implementadas com certa proximidade, como:
     -> ademais exemplos
 
 
+ -> Save:
+	Caso haja algum problema com o save, apague o arquivo "saveGame.ser" 	dentro do diretório do jogo e rode o jogo novamente.
 \ - - -   - - -   - - -   - - -   - - -   - - -   - - -   - - -     - - -     - - -   
